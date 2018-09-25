@@ -1,0 +1,194 @@
+# Purpose
+# -------
+# Makefile for the CSIRO Mk3L climate system model.
+#
+# Usage
+# -----
+# 'make' builds the model
+# 'make clean' tidies up afterwards
+#
+# History
+# -------
+# 2006 May 16	Steven Phipps   Original version
+# 2006 Jun 22	Steven Phipps   -fpe0 added to the compiler options for
+#				ac.apac.edu.au and lc.apac.edu.au
+# 2007 May 31	Steven Phipps   (1) Modified to enable the new ocean model grid
+#				(2) Removed redundant configuration
+#				    information for sc.apac.edu.au
+# 2007 Jun 2	Steven Phipps	Removed redundant source file dencal.f
+# 2007 Jun 4	Steven Phipps	Modified for the replacement of the OCEAN_DBL
+#				preprocessor macro with OCEAN_LOW
+# 2007 Jun 20	Steven Phipps	Added occoup1.f; removed tracer1.f
+# 2007 Oct 8	Steven Phipps	Updated the libraries on ac.apac.edu.au to
+#				version 9.1 of the Intel Fortran compiler
+# 2007 Dec 20	Steven Phipps   Added conserve_fw2.f, downscale.f; removed
+#				step0.f
+# 2008 Feb 3	Steven Phipps   Added read_real_3d.f90
+# 2008 Feb 4	Steven Phipps	Removed r2fcfld.f
+# 2008 Feb 5	Steven Phipps	Added read_int_2d.f90, read_real_2d.f90
+# 2008 Mar 8	Steven Phipps	Added oflux_read.f, oflux_write.f,
+#				orest_read.f, orest_write.f; removed ocemon.f,
+#				odam.f
+# 2008 Nov 10	Steven Phipps	Macro definitions extracted to separate file
+# 2008 Nov 20	Steven Phipps	Updated for conversion of hstring.c to Fortran;
+#				merged with Makefile_low
+# 2009 Apr 8	Steven Phipps	Added m2003.f90
+# 2009 May 11	Steven Phipps	Added ocemon.f; tidied up list of object files
+# 2009 Aug 6	Steven Phipps	Added hose.f
+
+#########################
+#   Macro definitions   #
+#########################
+
+include ../../bld/macros
+
+#######################
+#   Compile options   #
+#######################
+
+ifeq ($(OCEAN_LOW), yes)
+  CPPFLAGS := $(CPPFLAGS) -DOCEAN_LOW
+endif
+
+####################
+#   Object files   #
+####################
+
+# Atmosphere model
+
+ATM = aplota.o  aploti.o  assel.o  ateday.o  atemon.o  atstart.o  atstep.o \
+      bvnfcalc.o  c_aero.o  checkl.o  cldblk.o  clddia.o  cldset.o  clo89.o \
+      cloud.o  cloud2.o  cloudm.o  co2_read.o  collst.o  collstx.o  comb_l.o \
+      conserve.o  conserve_fw.o  conserve_fw2.o  conv.o  convukmo.o  cvmix.o \
+      datard.o  diffn.o  downscale.o  dtogcray.o  dynm.o  dynmnl.o  dynmst.o \
+      dynmvo.o  e1e288.o  e3v88.o  ecread.o  energy.o  errcheck.o  esbda.o \
+      esibda.o  extend.o  filerd.o  filest.o  filewr.o  finterp.o  fst88.o \
+      ftospec.o  ftospec2.o  gauleg.o  gaussv.o  gwdrag.o  hadvect.o \
+      hconst.o  hinterp.o  hist_acc.o  hist_cld.o  hist_save.o  hist_wlat.o \
+      hkuo.o  hmread.o  hsflux.o  hstring.o  hvertmx.o  icecon.o  icefhx.o \
+      icestat.o  icefall.o  icetau.o  inital.o  initax.o  initfs.o \
+      initice.o  jmcgslt.o  just_fm.o  landrun.o  lgndre.o  linear.o \
+      lwr88.o  main.o  matinv.o  matset.o  mfftga.o  mfftma.o  mmtx.o \
+      mtxmtx.o  ncinit.o  ncput.o  nestarc.o  newcloud.o  newrain.o \
+      ngwdrag.o  o3_read.o  o3blk.o  o3read_amip.o  o3set.o  o3set_amip.o \
+      ocforce.o  ocicurr.o  ocntau.o  ocsave1.o  openfl.o  openhist.o \
+      orbpar.o  ordleg.o  phys.o  physgm.o  prdaily.o  prmlomap.o  progcld.o \
+      prsmap.o  prtcd.o  prtcl.o  prtt.o  przav.o  ptogcray.o  radcoupl.o \
+      radfs.o  radh_l.o  radhyb.o  radin.o  radrhs.o  rads_l.o  radsgrg.o \
+      radslab.o  radstres.o  radvars.o  rainda.o  read_int_2d.o \
+      read_real_2d.o  read_real_3d.o  readnml1.o  reset.o  seaice.o \
+      semiis.o  setqcld.o  solargh.o  source.o  spa88.o  specam.o \
+      surfdiag.o  surfset.o  surfa.o  surfupa.o  surfb.o  surfupb.o \
+      surfupl.o  swr89.o  table.o  timet.o  tmread.o  traceout.o  tracera.o \
+      transf.o  trim.o  trim3x.o  ukall.o  uvharm.o  uvreal.o  vadvect.o \
+      vinterp.o  xtchemie.o  xtemiss.o  xtsink.o  xtwetdep.o  zenith.o \
+      zerogi.o  zerost.o  hose.o
+
+# Sea ice model
+
+ICE = advect.o  cavit.o  cavit2.o  dynice.o  flatme.o  flatset.o  icebound.o \
+      icediag.o  icedrive.o  icefree.o  icesetup.o  ltoh.o  ltou.o \
+      polefilt.o  timefilt.o  wrapu.o
+
+# Ocean model
+
+OCE = clinic.o  filter.o  findex.o  m2003.o  matrix.o  occoup1.o  ocdatra.o \
+      ocdatro.o  ocean.o  ocemon.o  ocend.o  ocfinal.o  ocinit.o  \
+      oflux_read.o  oflux_write.o  orest_read.o  orest_write.o  relax.o \
+      state.o  step.o  tracer.o \
+       csiro_obgc.o chem.o ocmip_chem.o obgc_write.o
+
+# Coupled model
+
+OBJ = $(ATM) $(ICE) $(OCE)
+
+############################################
+#   Source files requiring preprocessing   #
+############################################
+
+F_IN    := $(wildcard *.F)
+F_OUT   := $(F_IN:.F=.f)
+F90_IN  := $(wildcard *.F90)
+F90_OUT := $(F90_IN:.F90=.f90)
+
+####################################
+#   Rules for building the model   #
+####################################
+
+model : PARAMS.f OPARAMS.f $(OBJ)
+	$(FC) $(FFLAGS) $(OBJ) $(LIB) -lrfftw -lfftw -lnetcdf -o model
+
+clean :
+	/bin/rm *.o $(F_OUT) $(F90_OUT)
+
+realclean :
+	/bin/rm *.o $(F_OUT) $(F90_OUT) model
+
+.SUFFIXES : .f .F .f90 .F90 .o
+
+.F.o :
+	$(CPP) $(CPPFLAGS) $< > $*.f
+	$(FC) $(FFLAGS) -c $(INC) $*.f
+
+.f.o :
+	$(FC) $(FFLAGS) -c $(INC) $<
+
+.F90.o :
+	$(CPP) $(CPPFLAGS) $< > $*.f90
+	$(F90) $(F90FLAGS) -c $(INC) $*.f90
+
+.f90.o :
+	$(F90) $(F90FLAGS) -c $(INC) $<
+
+#rjm
+csiro_obgc.f: csiro_obgc.F  OPARAMS.f
+	$(CPP) $(crdef) csiro_obgc.F csiro_obgc.f
+
+ocean.f:    ocean.F OPARAMS.f
+	$(CPP) $(crdef) ocean.F ocean.f
+
+ocemon.f:    ocemon.F OPARAMS.f
+	$(CPP) $(crdef) ocemon.F ocemon.f
+
+# rjm end
+
+PARAMS.f : PARAMS.F
+	$(CPP) $(CPPFLAGS) PARAMS.F PARAMS.f
+
+OPARAMS.f : OPARAMS.F
+	$(CPP) $(CPPFLAGS) OPARAMS.F OPARAMS.f
+
+bvnfcalc.o : bvnfcalc.f90
+	$(F90) $(FIXEDFLAGS) -c $(INC) bvnfcalc.f90
+
+ngwdrag.o : ngwdrag.f90
+	$(F90) $(FIXEDFLAGS) -c $(INC) ngwdrag.f90
+
+o3read_amip.o : o3read_amip.f90
+	$(F90) $(FIXEDFLAGS) -c $(INC) o3read_amip.f90
+
+o3set_amip.o : o3set_amip.f90
+	$(F90) $(FIXEDFLAGS) -c $(INC) o3set_amip.f90
+
+clinic.o : clinic.f
+	$(AUTO) $(AUTOFLAGS) -c $(INC) clinic.f
+
+state.o : state.f
+	$(AUTO) $(AUTOFLAGS) -c $(INC) state.f
+
+tracer.o : tracer.F
+	$(CPP) $(CPPFLAGS) $(crdef) tracer.F > tracer.f
+	$(AUTO) $(AUTOFLAGS) -c $(INC) tracer.f
+
+ocean.o : ocean.f
+	 $(F90)  $(AUTOFLAGS) -O0 -c $(INC) ocean.f
+
+orest_read.o : orest_read.f
+	 $(F90)  $(AUTOFLAGS) -O0 -c $(INC) orest_read.f 
+
+readnml1.o : readnml1.f
+	 $(F90)  $(AUTOFLAGS) -O0 -c $(INC) readnml1.f 
+
+main.o  : main.F
+	$(CPP) $(CPPFLAGS) < main.F  > main.f
+	$(FC) $(FFLAGS) -c -O0 $(INC) main.f

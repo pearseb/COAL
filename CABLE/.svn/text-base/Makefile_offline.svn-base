@@ -1,0 +1,90 @@
+# Makefile for offline CABLE LSM.
+# Usage: "make -fMakefile_offline" (same as "make -fMakefile_offline netcdf")
+#     or "make -fMakefile_offline text"
+# Gab Abramowitz - gabsun@gmail.com    - 2007
+# Bernard Pak added platform choices for CSIRO users - 2008
+# Also added casaCNP - 2010
+# Bugs and queries to Bernard.Pak@csiro.au
+
+PROG = ./cable
+
+###################################################################
+# Here are the main things users need to choose for themselves:
+#FC = /opt/SUNWspro/bin/f95    # compiler for sol-as
+FC = ifort                    # compiler on both cherax and shine
+#FC = g95 #g95, ifort
+# g95 -fbounds-check -ftrace=full -Wall -O2
+# ifort -fpstkchk -C    # -o0 through -o4
+FFLAGS = -O0
+
+#NCDIR = /usr/local/lib/                 # netcdf library address on sol-as
+#NCDIR = /tools/netcdf/3.6.0-p1/lib/     # netcdf library address on cherax
+#NCDIR = /usr/local/intel/lib/           # netcdf library address on shine-cl
+NCDIR = /apps/netcdf/3.6.3/lib/Intel/    # netcdf library address on vayu
+#NCDIR = /usr/local/netcdf-3.6.2_$(FC)/
+
+# User need to link the netcdf.mod file to the running directory 
+# if it differs from the directory where you compile the codes.
+# Use the 'link' command similar to that at the last line of this makefile
+# which require specifying the following directory.
+#NCMOD = /usr/local/include/netcdf.mod                         # on sol-as
+#NCMOD = /tools/netcdf/3.6.0-p1/include/netcdf.mod             # on cherax
+#NCMOD = /usr/local/intel/include/netcdf.mod                   # on shine-cl
+NCMOD = /apps/netcdf/3.6.3/include/Intel/netcdf.mod            # on vayu
+#NCMOD = $(NCDIR)src/f90/netcdf.mod
+# End of user changes (usually)
+###################################################################
+
+netcdf: $(PROG)
+	$(PROG)
+
+text: cable_txt # non-netcdf version of offline CABLE 
+	./cable_txt
+
+.SUFFIXES:.f90
+.f90.o:
+	$(FC) $(FFLAGS) -c $<
+
+$(PROG): cable_driver.o 
+	$(FC) $(FFLAGS) -o $(PROG) cable_driver.o cable_iovars.o cable_abort.o cable_air.o cable_roughness.o cable_albedo.o cable_radiation.o cable_canopy.o cable_cbm.o cable_read.o cable_write.o cable_initialise.o cable_input.o cable_output.o cable_parameters.o cable_checks.o cable_define_dimensions.o cable_define_types.o cable_math_constants.o cable_other_constants.o cable_photosynthetic_constants.o cable_physical_constants.o cable_soilsnow.o cable_carbon.o  casa_variable.o casa_cable.o casa_cnp.o casa_inout.o  -L$(NCDIR) -lnetcdf
+
+cable_txt: cable_drivertxt.o 
+	$(FC) $(FFLAGS) -o cable_txt cable_drivertxt.o cable_cbm.o cable_checks.o cable_outputtxt.o cable_parameters.o cable_variables.o cable_soilsnow.o cable_carbon.o  casa_variable.o casa_cable.o casa_cnp.o casa_inout.o
+
+clean:
+	rm -f *.o $(PROG) cable_txt *.mod
+	ln -s $(NCMOD) ./netcdf.mod
+
+# dependencies
+cable_abort.o: cable_abort.f90 cable_iovars.o cable_define_types.o cable_define_dimensions.o
+cable_air.o: cable_air.f90 cable_define_types.o cable_physical_constants.o
+cable_albedo.o: cable_albedo.f90 cable_define_types.o cable_physical_constants.o cable_other_constants.o cable_math_constants.o
+cable_canopy.o: cable_canopy.f90 cable_define_types.o cable_physical_constants.o cable_photosynthetic_constants.o cable_radiation.o cable_roughness.o cable_air.o
+cable_carbon.o: cable_carbon.f90 cable_define_types.o
+cable_cbm.o: cable_cbm.f90 cable_carbon.o cable_soilsnow.o cable_parameters.o cable_canopy.o cable_define_types.o cable_physical_constants.o cable_roughness.o cable_radiation.o cable_albedo.o
+cable_checks.o: cable_checks.f90 cable_canopy.o cable_define_types.o cable_physical_constants.o
+cable_driver.o: cable_driver.f90 cable_output.o cable_parameters.o cable_cbm.o  casa_variable.o casa_cable.o casa_cnp.o casa_inout.o
+cable_drivertxt.o: cable_drivertxt.f90 cable_outputtxt.o cable_parameters.o  casa_variable.o casa_cnp.o casa_inout.o
+cable_define_dimensions.o: cable_define_dimensions.f90
+cable_define_types.o: cable_define_types.f90 cable_define_dimensions.o
+cable_iovars.o: cable_iovars.f90 cable_define_dimensions.o
+cable_read.o: cable_read.f90 cable_iovars.o cable_abort.o cable_define_dimensions.o
+cable_initialise.o: cable_initialise.f90 cable_read.o cable_iovars.o cable_abort.o cable_define_dimensions.o cable_define_types.o cable_physical_constants.o
+cable_write.o: cable_write.f90 cable_iovars.o cable_abort.o cable_define_types.o cable_define_dimensions.o
+cable_input.o: cable_input.f90 cable_checks.o cable_abort.o cable_read.o cable_initialise.o cable_canopy.o cable_physical_constants.o cable_parameters.o
+cable_math_constants.o: cable_math_constants.f90 cable_define_dimensions.o
+cable_other_constants.o: cable_other_constants.f90 cable_define_dimensions.o
+cable_output.o: cable_output.f90 cable_input.o cable_write.o
+cable_outputtxt.o: cable_outputtxt.f90 cable_checks.o cable_carbon.o cable_physical_constants.o
+cable_parameters.o: cable_parameters.f90 cable_define_types.o cable_abort.o
+cable_photosynthetic_constants.o: cable_photosynthetic_constants.f90 cable_define_dimensions.o
+cable_physical_constants.o: cable_physical_constants.f90 cable_define_dimensions.o
+cable_radiation.o: cable_radiation.f90 cable_define_types.o cable_physical_constants.o cable_math_constants.o cable_other_constants.o
+cable_roughness.o: cable_roughness.f90 cable_define_types.o cable_physical_constants.o
+cable_soilsnow.o: cable_soilsnow.f90 cable_physical_constants.o cable_define_types.o
+casa_variabe.o: casa_variable.f90 cable_define_types.o cable_define_dimensions.o
+casa_cable.o: casa_cable.f90 cable_define_types.o cable_define_dimensions.o cable_carbon.o casa_variabe.o 
+casa_cnp.o: casa_cnp.f90 cable_define_types.o cable_define_dimensions.o cable_carbon.o casa_variable.o 
+casa_inout.o: casa_inout.f90 cable_define_types.o cable_define_dimensions.o cable_carbon.o casa_variable.o casa_cnp.o
+
+

@@ -1,0 +1,19 @@
+working on the code 
+
+rm GIANT4.f  - defined elsewhere
+rm GIANT5.f  - defined elsewhere
+
+rm  dtogcray.f 
+rm A2O.f 
+rm  orest_read.f 
+rm  tracer.F
+rm ocend.f
+rm orest_write.f
+rm ocean.F
+rm step.f
+rm oflux_read.f
+rm oflux_write.f 
+rm ocemon.F
+rm  ocinit.F
+rm ocforce.F
+rm OPARAMS.F 

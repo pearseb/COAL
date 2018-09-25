@@ -1,0 +1,548 @@
+# 1 "stdin"
+c End-of-month work for the ocean model transferred from OCEND to a new
+c subroutine, OCEMON.
+c SJP 2009/05/11
+c
+c Fixing the bug whereby at least one of LASTMONTH and MONTHS had to be greater
+c than zero, otherwise the model did not run. Now it is only necessary for any
+c one of NSSTOP, NDSTOP, LASTMONTH or MONTHS to be greater than zero.
+c SJP 2009/04/22
+c
+c Enhancing user control over the coupling between the atmosphere and ocean.
+c SJP 2009/04/21
+c
+c Minor fixes to resolve warnings issued by the g95 Fortran compiler.
+c SJP 2009/04/14
+c
+c CABLE_close is called here to deallocate arrays, write to the cable
+c output and restart files
+c AJA 2009/04/01
+c
+c The execution step counter nstepsa is moved to TIMEX.f
+c AJA 2009/03/19
+c
+c Modified for the conversion of the ocean model and coupled model restart
+c files to netCDF.
+c SJP 2008/03/08
+c
+c Rationalise the NAMELIST input for the ocean model.
+c SJP 2007/11/24
+c
+c (1) Modified to reflect the merger of OCENDC into OCEND.
+c (2) Removed the redundant argument (LCOUPLE) to OCCOUP1.
+c SJP 2007/06/20
+c
+c Major tidy-up of ocean model source code.
+c SJP 2007/06/18
+c
+c Transferred COMMON blocks to separate header files, as follows:
+c /MDAY/  ->  MDAY.f
+c SJP 2007/05/29
+c
+c Modified for v6.2-sjp1.4.
+c SJP 2004/08/09
+c
+c Correction to calculation of KNITD for ocean model runs, to ensure that
+c rounding does not result in it having the wrong value.
+c SJP 2002/01/31
+c
+c Changes to add fin to list of machines.
+c SJP 2001/12/05
+c
+c Changes to add machine type 'ALPH'.
+c SJP 2001/11/22
+c
+c $Log: main.f,v $
+c Revision 1.30  2001/10/12 02:06:58  rot032
+c HBG changes, chiefly for new river-routing scheme and conservation
+c
+c Revision 1.29  2000/08/16 02:59:26  rot032
+c NCEP initialization option and CGCM changes from HBG
+c
+c Revision 1.28  1998/12/10 01:08:03  ldr
+c Merge HBG changes with MRD changes.
+c
+c Revision 1.27  1998/10/22  00:01:18  mrd
+c Work around for NEC f77 bug.
+c
+c Revision 1.26.1.1  1998/12/10  00:55:57  ldr
+c HBG changes to V5-1-21
+c
+c Revision 1.26  1998/01/30  05:05:37  ldr
+c Further parallelization stuff for NEC from MRD.
+c
+c Revision 1.25  1997/12/19  01:25:42  ldr
+c Changes from ACH for 21 OGCM levels and optinal GM mixing scheme...
+c
+c Include array for storing depth of convective mixed layer
+c Include array for storing uedd, vedd, wedd. 
+c 
+c Revision 1.24  1997/07/24  05:59:17  ldr
+c Introduce logical variable called "start".
+c
+c Revision 1.23  1996/10/24  01:03:02  ldr
+c Comments, Legendre transforms and tidy-ups from TIE
+c
+c Revision 1.22  1996/02/19  04:09:52  ldr
+c Generalize for 24 levels.
+c
+c Revision 1.21  1995/07/05  06:14:32  ldr
+c Changes from Dave Micklethwaite for Cray parallel execution tidied by LDR
+c and merged into V4-7-2l.
+c
+c Revision 1.20  1994/08/08  17:21:41  ldr
+c Strip off excessive RCS comments at top of file.
+c
+c Revision 1.19  94/07/11  12:31:35  ldr
+c Rearrange variables in common block /atdat to avoid misalignment warnings
+c at 64 bit on SGI.
+c 
+c Revision 1.18  94/05/13  14:52:58  ldr
+c Move model ID message to be before namelist write as before.
+c 
+c Revision 1.17  93/12/17  11:51:39  ldr
+c Changes to V4-4-45l from HBG for coupled model
+c 
+c Revision 1.16  93/11/29  10:12:15  ldr
+c Correction to calculation of knitd (nsteps per day) - old form could give
+c wrong answer due to roundoff error in real to integer conversion.
+c 
+c Revision 1.15  93/11/04  11:31:13  ldr
+c Removed redundant data statement for mdays - would cause problems
+c on the Fujitsu.
+c 
+c Revision 1.14  93/11/03  13:07:24  ldr
+c Make locean a namelist flag.
+c 
+c Revision 1.13  93/11/03  11:44:19  ldr
+c Changes to V4-4-24l from HBG for coupled model
+c 
+c Revision 1.12  93/10/07  12:09:50  ldr
+c Move machine parameter statement into new include file MACHINE.f.
+c
+c     INPUT/OUTPUT
+c     Input:   from common/ocean_nml in OCEAN_NML.f
+c                  iocyr - no. years (for ocean model run alone)
+c                  iocmn - no. months (for ocean model run alone)
+c
+c              from common/fewflags in FEWFLAGS.f
+c                  lcouple - flag to run model in coupled mode, default F
+c                  locean - if T, run ocean model in stand-alone mode,
+c                           default F
+c                  nsstop - if > zero, stop model run after nsstop steps
+c                  ndstop - if non-zero, stop model run after ndstop days
+c                  lastmonth - if non-zero, run stops after calendar month
+c                              lastmonth( atmospheric and coupled runs only)
+c                  months - number of months required, used if nsstop, ndstop,
+c                           & lastmonth are all zero
+c                  filewrflag - if T, write restart file at end of run,
+c                               default F
+c
+c              from common/mday in this program
+c                  mdays - days in a month
+c
+c              from common/timex in TIMEX.f
+c                  dt - time step in seconds    
+c                  mstep - timestep in minutes
+c                  month - month counter mstep 
+c
+c     Output:  from common/atdat in this program
+c                  iday  - logical variable, T if end of day  
+c                  ndadd - counts number of (day) additions to print files
+c
+c     In/Out:  from common/atdat in this program
+c                  endofmonth - counter
+c
+c              from common/atm2oc in ATM2OC.f
+c                  nmth - month counter for ocean routines
+c
+c              from common/fewflags in FEWFLAGS.f
+c                  incd - internal model variable, set from ndstop
+c
+c 
+      PROGRAM MAIN
+c---- This is the main controlling program for the CSIRO climate model
+c----
+c---- This model can be run as :
+c
+c     (1) Atmosphere (+ice) (+canopy)
+c        [use "make" which will generate "model"]
+c         Set locean=F and lcouple=F in namelist.
+c
+c     (2) Coupled model = (1) + Ocean model
+c        [use "make cmodel" which will generate "model"]
+c         Set locean=F and lcouple=T in namelist.
+c
+c     (3) Ocean only model. This excludes the above.
+c        [use "make cmodel" which will generate "model"]
+c         Set locean=T in namelist.
+c
+
+      implicit none
+C Global parameters
+      include 'PARAMS.f'
+      include 'OPARAMS.f'
+      include 'VERSION.f'
+
+C Global data blocks
+      include 'OCEAN_NML.f'
+      include 'ATM2OC.f'
+      include 'FEWFLAGS.f'
+      include 'TIMEX.f'
+      include 'MDAY.f'
+      include 'ORESTART.f'
+
+      real tdt
+      integer ndadd,nrunday,idaypsav,mstepsav
+      logical iday,endofmonth
+      common/atdat/tdt,ndadd,nrunday,idaypsav,mstepsav,iday,endofmonth
+
+C Local work arrays and variables
+      integer ia
+      integer icstp
+      integer id
+      integer ijdyn
+      integer is
+      integer iy
+      integer kldif
+      integer knitd
+      integer m
+      integer msum
+      integer nato
+      integer nstepso
+      logical fullmonth
+
+      character*50 exptyp
+
+C Local data, functions etc
+
+C Start code : ----------------------------------------------------------
+
+c Find machine name (hostname) and number of processors
+c Check AGCM resolution
+      call find_macha
+
+c READ IN NAMELISTS
+      call readnml1
+
+      IF (.not.locean) THEN
+
+C***********************************************************************
+C***********************************************************************
+C***********************************************************************
+C     This part is for the atmospheric or coupled model only
+C***********************************************************************
+C***********************************************************************
+C***********************************************************************
+
+c---- It is designed to run for definite time periods :
+c
+c      (a) a given number of steps (test mode)
+c      (b) a number of days (test mode)
+c      (c) a number of months (1-12?)
+c
+c---- This control program dictates to both major model components
+c     (atmos and ocean) when to do timesteps.
+c     The atmos model incorporates optional ice and canopy models.
+c     The ocean model does not control the ice model.
+c
+c     The sequence is :
+c
+c        Initialize atmos (must be before ocean initialization)
+c        Initialize ocean
+c
+c         Time loop control
+c
+c           call ocean for step
+c           call atmos for step(s)
+c
+c           Check for file dumps
+c
+c         End of time loop
+c
+c        End of run requests
+c
+c---- (the ocean components are only called in coupled mode)
+c---- Note that the ocean model is called BEFORE the atmos model
+c---- and thus has to be supplied initially with relevant atmos
+c---- forcing data (taken from previous run).
+c
+c----
+c---- The atmos & coupled model run is controlled by parameters taken from
+c---- the input file. The length of the run is specified by :
+c   nsstop - if 0 has no effect, if > 0 model stops ater nsstop atmos steps
+c   ndstop - if 0 has no effect, else the  model stops after ndstop days.
+c            Note that incd is the variable used internally by the model; it is
+c            set based on ndstop.
+c   lastmonth - if 0 has no effect, else the model stops after calendar month
+c               lastmonth.
+c   months - number of months required (if all the above are zero).
+c
+c----
+c---- In coupled mode, the ocean model counter (ITT=ittx) is made to match the
+c---- atmospheric model. If they are different, a warning message is printed.
+c----
+       iday=.true.
+       endofmonth=.false.
+       start=.true.
+
+c---- initialize model(s)
+        call atstart(exptyp)
+c.... (Note that atstart is an entry point to the old csiro9)
+       nato=1
+       knitd=(24*60/mstep)
+       if(nsstop.lt.0.and.nsstop.gt.-10)then
+         if(filewrflag) call filewr(exptyp)
+         if (lcouple) call ocfinal(lcouple)
+         print*,' Stopping after 0 steps'
+         stop
+       elseif(nsstop.le.-99)then
+         call finterp(exptyp) !For vertical interpolation of RS files
+         print*,' Stopping after 0 steps'
+         stop
+       endif
+       if (lcouple) then
+c.... (Note that ocstart is an entry point to the old ocean)
+         call ocstart(lcouple)
+         call occoup1
+c          compute how many atmos steps per ocean step
+         nato=int((DTTSF+1.0)/dt)
+         If(nato*dt.ne.DTTSF)Then
+           print *,'The ocean step is not a multiple of the atmos step'
+           print *,'Dt atmos=',dt,'  Dt ocean=',DTTSF
+           stop
+         End If
+         knitd=knitd/nato
+       end if
+
+c---- Start the time loop
+      nstepsa=0
+      ndadd=0
+      nstepso=0
+      if(lastmonth.ne.0)then
+        months=lastmonth-month+1
+        print*,'Setting MONTHS based on value of LASTMONTH to ',months
+      endif
+
+c...  If LASTMONTH and MONTHS are both equal to zero, set MONTHS equal to 1;
+c...  the model does not run otherwise
+      if ((lastmonth .eq. 0) .and. (months .eq. 0)) months = 1
+
+c****************** Loop for months **********
+      do 999 m=1,months
+c..... for atmos model, must reset values for each new month
+c..... (see atstart, with entry point atsmon)
+      if(m.gt.1) call atsmon(m)
+
+c************ Loop for days in month or incd days (if incd<mdays(month))
+      do 988 id=1,incd
+
+c****** Loop for number of steps per day
+*PDIR RESERVE ! Comment here to avoid an NEC f77 bug
+      do 977 is=1,knitd
+      if(lcouple)then
+c.... (Note that ocstep uses the old step routine as a psuedonym)
+        call ocstep
+        nstepso=nstepso+1
+        icstp=0
+        call ocinit(nato,icstp)
+      end if
+c.. there may be more than one atmos step per ocean step
+c.. (if not coupled nato=1)
+      do 20 ia=1,nato
+        call atstep(exptyp,ijdyn,nato)
+   20   nstepsa=nstepsa+1
+      if (lcouple) call ocend(nato)
+  977 continue
+*PDIR RELEASE
+c****** End of loop for number of steps per day
+
+      iday=.true.
+      endofmonth = (id .eq. mdays(month)) .or. (nstep. eq. nsteps)
+      fullmonth = id .eq. mdays(month)
+c---- end of day : Do end of day jobs
+      call ateday
+  988 continue
+c************ End of loop for days
+
+c---- end of month : Do end of month jobs
+      call atemon(exptyp,ijdyn)
+      if (lcouple .and. fullmonth) call ocemon(lcouple)
+      if (lcouple .and. endofmonth) write(0,*)'endofmonth at itt=',itt
+      if(ndstop.ne.0.and.ndstop.ne.31)then
+        write(6,'(a,i2,a)')'Stopped after ',incd,' days.'
+        stop
+      endif
+  999 continue
+c****************** End of loop for months **********
+
+c---- end of run : Do end of run jobs
+! CABLE variables are deallocated, output file and resart file are
+! written
+      CALL CABLE_close()     
+ 
+      if (lcouple) call ocfinal(lcouple)
+      write(6,'(a,i2,a)')
+     &     'Normal termination of run after ',months,' months.'
+      stop
+
+      ELSE ! end of control for atmospheric/coupled model run
+
+C***********************************************************************
+C***********************************************************************
+C***********************************************************************
+C     This part is for the ocean model run by itself.
+C***********************************************************************
+C***********************************************************************
+C***********************************************************************
+
+c----
+c---- This is the main controlling program for the CSIRO ocean model
+c----
+c---- It is designed to run for definite time periods :
+c
+c      (a) a number of months
+c      (b) a number of years
+c
+      lcouple=.false.
+c.... (Note that ocstart is an entry point to the old ocean)
+
+         call ocstart(lcouple)
+
+c.... (Note that ocstep uses the old step routine as a psuedonym)
+c---- knitd is the number of steps per day for T (may be accelerated
+c---- and thus a long step). Do not allow it to be > 1 day
+
+      if(DTTSF.gt.86400.0)then
+        print *,' DTTSF > 1 day, resetting'
+        DTTSF=86400.0
+      end if
+      knitd = int(86400.0/DTTSF + 0.1)
+
+c---- The number of years to be integrated is set via iocyr.
+c---- iocyr is read from  the ocean model input file &ICPLE in ocean.f.
+c---- If a short run is required, (less than 1 year) use iocmn.
+c---- iocmn is the number of months (from &ICPLE).
+c---- For multi year runs it is 12. If the input is < 12, then iocyr=1
+        kldif=mod(ittx,(365*knitd))
+
+      if(iocmn.ne.12)then
+c.... This part checks startup for short runs (few months)
+        iocyr=1
+c..  work out startup month from ittx
+        kldif=mod(ittx,(365*knitd))
+        msum=0
+        nmth=12
+  100   nmth=nmth+1
+        if(nmth.eq.13)nmth=1
+        msum=msum+mdays(nmth)*knitd
+        if(kldif.ge.msum)goto 100
+        msum=msum-mdays(nmth)*knitd
+        if(msum.ne.kldif)then
+          write(6,*)'Not at the beginning of month ',nmth
+          stop
+        endif
+        print *,'Ocean model run for ',iocmn,' months.'
+        go to 150
+      end if
+
+c.... This part checks that multi year runs are from Jan 1.
+      if(iocyr.lt.1)iocyr=1
+        if(kldif.ne.0)then
+          print *,'Trying to start multi-year run of ocean model'
+          print *,'from data not at Jan 1. *STOP*  ITT=',ittx
+          stop
+        end if
+      nmth=1
+      print *,'Ocean model run for ',iocyr,' years.'
+
+  150 nstepso=ittx
+
+c****************** Loop for years  **********
+      do 2000 iy=1,iocyr
+
+c****************** Loop for months **********
+      do 1999 m=1,iocmn
+      incd=mdays(nmth)
+
+c************ Loop for days in month *********
+      do 1988 id=1,incd
+
+c****** Loop for number of steps per day
+      do 1977 is=1,knitd
+
+      nstepso=nstepso+1
+        call ocstep
+        print*, 'TIMESTEP COMPLETE'
+ 1977 continue !** End of loop for number of steps per day
+
+ 1988 continue !*** End of loop for days   **********
+
+      call ocemon(lcouple)
+      nmth=nmth+1
+      if(nmth.gt.12)nmth=1
+ 1999 continue !*** End of loop for months **********
+
+ 2000 continue !*** End of loop for years  **********
+
+c---- end of run : Do end of run jobs
+                  call ocfinal(lcouple)
+      print *,'Normal termination of run after ',nstepso,
+     & ' ocean model steps'
+      print *,'Timestep was ',DTTSF
+      stop
+
+      ENDIF ! end of ocean model only part
+
+      end
+c
+      subroutine find_macha
+
+      implicit none
+C Global parameters
+      include 'PARAMS.f'
+
+C Argument list
+
+C Local shared common blocks (see TASK COMMON/TASKLOCAL above)
+
+C Global data blocks
+
+C Local work arrays and variables
+      integer numthreads
+
+      character*30 value
+
+C Local data, functions etc
+
+C Start code : ----------------------------------------------------------
+
+# 521
+
+      write(6,*)'Machine type = LINU'
+
+      
+c Determine the number of processors according to the
+c  request in the job run script.
+
+      call getenv('OMP_NUM_THREADS', value)
+      read (value, '(i2)') numthreads
+      numthreads = max(1,numthreads)
+
+      write(6,*)'Number of processors requested =',numthreads
+
+c Check AGCM resolution
+
+      if(lw.eq.22.and.mw.eq.22)then
+        write(6,*)'Resolution is R21'
+      elseif(lw.eq.43.and.mw.eq.43)then
+        write(6,*)'Resolution is R42'
+      elseif(lw.eq.64.and.mw.eq.64)then
+        write(6,*)'Resolution is T63'
+      else
+        write(6,*)'Error: Resolution must be R21 or R42 or T63'
+        stop
+      endif
+
+      return
+      end

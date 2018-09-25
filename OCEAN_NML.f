@@ -1,0 +1,78 @@
+c Added bulk_force logical variable to enable ocean GCM to be forced by
+c bulk formula of heat and freshwater fluxes in stand alone mode.
+c Pearse Buchanan 16/07/2018
+c
+c Removing the ITM=1 option from the ocean model source code.
+c SJP 2009/06/23
+c
+c Adding density as an ocean model statistic.
+c SJP 2009/04/21
+c
+c Enabling user control over the ocean model statistics that are saved to file.
+c SJP 2009/04/19
+c
+c Implementing the equation of state of McDougall et al (2003).
+c SJP 2009/04/08
+c
+c (1) Implementing a Robert time filter.
+c (2) Adding code to check for conservation of tracers within the ocean.
+c SJP 2008/12/17
+c
+c Add the variables COS_AMF and NO_GM_ARCTIC.
+c SJP 2007/02/27
+c
+c Defines the COMMON block /ocean_nml/, which contains all the NAMELIST
+c variables for the ocean model.
+c SJP 2007/11/23
+
+      integer nfirst, nnergy, nmix, ntsi, na, mxscan, iocyr, iocmn,
+     &        jplot, itset
+      logical cos_amf, no_gm_arctic, robert_time_filter,
+     &        check_conservation, m2003_eos,
+     &        save_smfzon, save_smfmer, save_stfht, save_stfsal,
+     &        save_temp, save_sal, save_rho, save_u, save_v, save_w,
+     &        save_uedd, save_vedd, save_wedd, save_res, save_cdepthm,
+     &        save_over, bulk_force, ncar_bulk_method, mit_bulk_method
+      real amf, fkpmf, ahi1f, ahi2f, ahi3f, slmxrf, ahh1f, ahh2f, ahh3f,
+     &     ahe1f, ahe2f, ahe3f, dttsf, dtuvf, dtsff, acorf, sorf, critf,
+     &     trelax, cdrag, dtxf, pnu
+
+      common /ocean_nml/
+
+c.....  &CONTRL
+     &  nfirst, nnergy, nmix, ntsi, na, robert_time_filter, pnu,
+     &  check_conservation, m2003_eos, bulk_force, ncar_bulk_method,
+     &  mit_bulk_method,
+
+c.....  &EDDY
+     &  cos_amf, amf, fkpmf, ahi1f, ahi2f, ahi3f, slmxrf,
+
+c.....  &EDDY2
+     &  ahh1f, ahh2f, ahh3f,
+
+c.....  &ETRANS
+     &  no_gm_arctic, ahe1f, ahe2f, ahe3f,
+
+c.....  &TSTEPS
+     &  dttsf, dtuvf, dtsff,
+
+c.....  &PARMS
+     &  acorf, mxscan, sorf, critf, trelax,
+
+c.....  &ICPLE
+     &  iocyr, iocmn,
+
+c.....  &PLTG
+     &  jplot,
+
+c.....  &COEFS
+     &  cdrag, itset,
+
+c.....  &ACCEL
+     &  dtxf(km),
+
+c.....  &OSAVE
+     &  save_smfzon, save_smfmer, save_stfht, save_stfsal,
+     &  save_temp, save_sal, save_rho, save_u, save_v, save_w,
+     &  save_uedd, save_vedd, save_wedd, save_res, save_cdepthm,
+     &  save_over

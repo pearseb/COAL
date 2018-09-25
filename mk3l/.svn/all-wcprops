@@ -1,0 +1,2009 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/CSIRO_Mk3L/!svn/ver/313/branches/coal_1/core/src/model
+END
+ECFIELD.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ECFIELD.f
+END
+QFLXDAT.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/QFLXDAT.f
+END
+icefhx.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icefhx.f
+END
+CNSTA.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CNSTA.f
+END
+dtogcray.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/dtogcray.f
+END
+timefilt.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/timefilt.f
+END
+A2O.f
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/A2O.f
+END
+PARAMS.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/PARAMS.F
+END
+orest_read.f
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/orest_read.f
+END
+cloud2.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cloud2.f
+END
+transf.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/transf.f
+END
+zenith.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/zenith.f
+END
+convukmo.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/convukmo.f
+END
+conv.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/conv.f
+END
+hkuo.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hkuo.f
+END
+oline.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/oline.h
+END
+linear.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/linear.f
+END
+trim.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/trim.f
+END
+gas.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/gas.h
+END
+e1e288.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/e1e288.f
+END
+inital.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/inital.f
+END
+tracer.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/tracer.F
+END
+phys.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/258/branches/coal_1/core/src/model/phys.f
+END
+conserve.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/conserve.f
+END
+mmtx.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/mmtx.f
+END
+extra.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/extra.h
+END
+ocend.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocend.f
+END
+cavit2.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cavit2.f
+END
+c_aero.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/c_aero.f
+END
+MDAY.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/MDAY.f
+END
+FULLWD.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FULLWD.f
+END
+RKLF.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RKLF.f
+END
+icefall.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icefall.f
+END
+jmcgslt.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/jmcgslt.f
+END
+ORBRAD.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ORBRAD.f
+END
+CLOUDPAR.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CLOUDPAR.f
+END
+SI.f
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SI.f
+END
+GAUSL.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/GAUSL.f
+END
+read_real_2d.f90
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/read_real_2d.f90
+END
+RELATE.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RELATE.f
+END
+FLDMRI.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FLDMRI.f
+END
+GRADNS.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/GRADNS.f
+END
+WORKRID.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/WORKRID.f
+END
+ncinit.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ncinit.f
+END
+zerost.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/zerost.f
+END
+cvmix.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cvmix.f
+END
+prmlomap.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prmlomap.f
+END
+radh_l.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radh_l.f
+END
+surfset.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/surfset.f
+END
+comb_l.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/comb_l.f
+END
+FEWFLAGS.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/FEWFLAGS.f
+END
+SFC4.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SFC4.f
+END
+nestarc.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/nestarc.f
+END
+collst.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/collst.f
+END
+mtxmtx.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/mtxmtx.f
+END
+CHANGEM.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CHANGEM.f
+END
+icefree.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icefree.f
+END
+ftospec.F
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ftospec.F
+END
+gauleg.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/gauleg.f
+END
+SCALAR.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SCALAR.f
+END
+filerd.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/filerd.F
+END
+ateday.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ateday.f
+END
+SSTSAL.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SSTSAL.f
+END
+csiro_obgc.F
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/csiro_obgc.F
+END
+dynmvo.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/dynmvo.f
+END
+clddia.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/clddia.f
+END
+aplota.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/aplota.f
+END
+state.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/state.f
+END
+icesetup.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icesetup.f
+END
+timet.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/timet.f
+END
+ltou.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ltou.f
+END
+ecread.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ecread.f
+END
+SRCCOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SRCCOM.f
+END
+extend.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/extend.f
+END
+bvnfcalc.f90
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/bvnfcalc.f90
+END
+aploti.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/aploti.f
+END
+oflux_read.f
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/oflux_read.f
+END
+ocntau.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocntau.F
+END
+RADISW.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RADISW.f
+END
+hvertmx.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hvertmx.f
+END
+clo89.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/clo89.f
+END
+atstep.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/atstep.f
+END
+FLXBLOK.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FLXBLOK.f
+END
+CLDCOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CLDCOM.f
+END
+FILES.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FILES.f
+END
+readnml1.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/readnml1.f
+END
+RDFLUX.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RDFLUX.f
+END
+cloud.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cloud.f
+END
+QCLOUD1.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/QCLOUD1.f
+END
+Makefile1
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/Makefile1
+END
+RNDDTA.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RNDDTA.f
+END
+dynmst.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/dynmst.f
+END
+radrhs.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radrhs.f
+END
+read_int_2d.f90
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/read_int_2d.f90
+END
+initice.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/initice.f
+END
+errcheck.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/errcheck.f
+END
+PHYSPARAMS.f
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/PHYSPARAMS.f
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/Makefile
+END
+seaice.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/seaice.f
+END
+hconst.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hconst.f
+END
+solargh.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/solargh.f
+END
+icecon.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icecon.f
+END
+hmread.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hmread.f
+END
+SURF1.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/SURF1.f
+END
+ocsave1.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocsave1.f
+END
+dynmnl.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/dynmnl.f
+END
+przav.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/przav.f
+END
+ocmip_chem.f
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocmip_chem.f
+END
+cavit.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cavit.f
+END
+HYBRPR.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/HYBRPR.f
+END
+dynice.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/dynice.f
+END
+ACHEXT.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ACHEXT.f
+END
+esbda.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/esbda.f
+END
+polefilt.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/polefilt.f
+END
+newcloud.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/newcloud.f
+END
+SULFATE1.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SULFATE1.f
+END
+filter.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/filter.f
+END
+GIANT3.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/GIANT3.f
+END
+surfupa.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/surfupa.f
+END
+OHIST.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/OHIST.f
+END
+table.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/table.f
+END
+icebound.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icebound.f
+END
+energy.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/energy.f
+END
+LEVD.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/LEVD.f
+END
+matinv.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/matinv.f
+END
+wrapu.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/wrapu.f
+END
+FLDRI.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FLDRI.f
+END
+STFLAGS.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/STFLAGS.f
+END
+orest_write.f
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/orest_write.f
+END
+CO2DTA.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CO2DTA.f
+END
+PRINTT.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/PRINTT.f
+END
+conserve_fw.f
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/conserve_fw.f
+END
+ocemon.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocemon.F
+END
+atstart.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/atstart.f
+END
+traceout.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/traceout.f
+END
+TIMEX.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/TIMEX.f
+END
+radstres.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radstres.f
+END
+HYBARR.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/HYBARR.f
+END
+FCOR.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FCOR.f
+END
+BGRND.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/BGRND.f
+END
+uvreal.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/uvreal.f
+END
+hose.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hose.f
+END
+radvars.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radvars.f
+END
+P_EXNERC.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/P_EXNERC.f
+END
+RVARSG.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RVARSG.f
+END
+CONVECTD.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CONVECTD.f
+END
+TFCOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TFCOM.f
+END
+NEST.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/NEST.f
+END
+FCORR.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FCORR.f
+END
+chem.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/chem.f
+END
+o3_read.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/o3_read.f
+END
+read_real_3d.f90
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/read_real_3d.f90
+END
+hist_acc.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hist_acc.f
+END
+TIME1.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TIME1.f
+END
+UVPGD.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/UVPGD.f
+END
+co2.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/co2.h
+END
+trim3x.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/trim3x.f
+END
+surfupb.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/surfupb.f
+END
+GIANT4.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/GIANT4.f
+END
+filest.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/filest.f
+END
+KTSIN.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/KTSIN.f
+END
+collstx.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/collstx.f
+END
+radsgrg.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radsgrg.f
+END
+ocdatro.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocdatro.f
+END
+swr89.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/swr89.f
+END
+zerogi.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/zerogi.f
+END
+TTFC.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TTFC.f
+END
+ORESTART.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ORESTART.f
+END
+xtwetdep.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/xtwetdep.f
+END
+COEFFS.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/COEFFS.f
+END
+advect.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/advect.f
+END
+LOGIMSL.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/LOGIMSL.f
+END
+ukall.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ukall.f
+END
+gaussv.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/gaussv.f
+END
+occoup1.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/occoup1.f
+END
+CNSTE.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CNSTE.f
+END
+tracera.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/tracera.f
+END
+cloudm.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cloudm.f
+END
+ocinit.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocinit.F
+END
+HCON.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/HCON.f
+END
+openhist.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/openhist.f
+END
+ECAMEAN.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ECAMEAN.f
+END
+checkl.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/checkl.f
+END
+cldblk.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cldblk.f
+END
+xtemiss.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/xtemiss.f
+END
+o3read_amip.f90
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/o3read_amip.f90
+END
+clinic.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/clinic.f
+END
+prsmap.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prsmap.f
+END
+ltoh.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ltoh.f
+END
+ocicurr.F
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocicurr.F
+END
+ECPARM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ECPARM.f
+END
+HIST.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/HIST.f
+END
+GWDDATA.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/GWDDATA.f
+END
+tmread.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/tmread.f
+END
+LLMAX.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/LLMAX.f
+END
+GIANT5.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/GIANT5.f
+END
+BCOGCM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/BCOGCM.f
+END
+initax.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/initax.f
+END
+setqcld.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/setqcld.f
+END
+source.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/source.f
+END
+ECTRAC.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ECTRAC.f
+END
+MASIV2.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/MASIV2.f
+END
+m2003.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/m2003.f
+END
+uvharm.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/uvharm.f
+END
+ngwdrag.f90
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ngwdrag.f90
+END
+mfftga.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/mfftga.f
+END
+oflux_write.f
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/oflux_write.f
+END
+finterp.F
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/finterp.F
+END
+DATICE1.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/DATICE1.f
+END
+relax.F
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/relax.F
+END
+lgndre.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/lgndre.f
+END
+ocfinal.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocfinal.f
+END
+PHYSICAL.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/PHYSICAL.f
+END
+ETRANS1.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ETRANS1.f
+END
+cldset.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/cldset.f
+END
+xtsink.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/xtsink.f
+END
+surfa.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/surfa.f
+END
+openfl.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/openfl.f
+END
+RMGRID.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RMGRID.f
+END
+main.F
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/main.F
+END
+obgc_write.f
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/obgc_write.f
+END
+RDPARM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RDPARM.f
+END
+ATM2OC.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ATM2OC.f
+END
+icedrive.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/294/branches/coal_1/core/src/model/icedrive.f
+END
+radin.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/294/branches/coal_1/core/src/model/radin.f
+END
+OPARAMS.F
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/OPARAMS.F
+END
+flatset.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/flatset.f
+END
+surfdiag.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/surfdiag.f
+END
+FIELDS.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FIELDS.f
+END
+assel.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/assel.f
+END
+just_fm.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/just_fm.f
+END
+hinterp.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hinterp.f
+END
+ESTABL.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ESTABL.f
+END
+ONEDIM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ONEDIM.f
+END
+fst88.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/fst88.f
+END
+e3v88.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/e3v88.f
+END
+findex.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/findex.f
+END
+ocdatra.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocdatra.f
+END
+hadvect.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hadvect.f
+END
+FREEZE.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/FREEZE.f
+END
+reset.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/reset.f
+END
+atemon.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/atemon.f
+END
+UKPARAMS.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/UKPARAMS.f
+END
+lwr88.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/lwr88.f
+END
+WORKSP.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/WORKSP.f
+END
+CPARAMS.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CPARAMS.f
+END
+vinterp.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/vinterp.f
+END
+vadvect.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/vadvect.f
+END
+radfs.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radfs.f
+END
+surfupl.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/surfupl.f
+END
+MASIV3.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/MASIV3.f
+END
+COMDICE.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/COMDICE.f
+END
+landrun.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/landrun.f
+END
+newrain.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/newrain.f
+END
+xtchemie.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/xtchemie.f
+END
+VERTV.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/VERTV.f
+END
+dynm.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/257/branches/coal_1/core/src/model/dynm.f
+END
+radcoupl.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radcoupl.f
+END
+o3blk.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/o3blk.f
+END
+mfftma.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/mfftma.f
+END
+ordleg.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ordleg.f
+END
+ETRANS2.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ETRANS2.f
+END
+downscale.f
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/downscale.f
+END
+O2A.f
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/O2A.f
+END
+surfb.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/256/branches/coal_1/core/src/model/surfb.f
+END
+icediag.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icediag.f
+END
+ftospec2.F
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ftospec2.F
+END
+orbpar.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/orbpar.f
+END
+TRACEBLK.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TRACEBLK.f
+END
+ptogcray.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ptogcray.f
+END
+hist_cld.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hist_cld.f
+END
+prtt.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prtt.f
+END
+progcld.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/progcld.f
+END
+SFC1.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SFC1.f
+END
+KDACOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/KDACOM.f
+END
+rainda.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/rainda.f
+END
+conserve_fw2.f
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/conserve_fw2.f
+END
+GLMEAN.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/GLMEAN.f
+END
+LSMI.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/LSMI.f
+END
+specam.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/specam.f
+END
+radhyb.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radhyb.f
+END
+icetau.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icetau.f
+END
+LWOUT.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/LWOUT.f
+END
+bio.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/bio.h
+END
+obgc.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/obgc.h
+END
+CRELAX.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CRELAX.f
+END
+TM.f
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TM.f
+END
+ocean.F
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocean.F
+END
+diffn.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/diffn.f
+END
+AOGCM.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/AOGCM.f
+END
+esibda.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/esibda.f
+END
+HOSING.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/HOSING.f
+END
+ncput.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ncput.f
+END
+OCEAN_NML.f
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/OCEAN_NML.f
+END
+o3set.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/o3set.f
+END
+matset.F
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/matset.F
+END
+RADAV.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/RADAV.f
+END
+hist_wlat.f
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hist_wlat.f
+END
+datard.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/254/branches/coal_1/core/src/model/datard.f
+END
+MASIV4.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/MASIV4.f
+END
+WORK1.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/WORK1.f
+END
+spa88.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/spa88.f
+END
+SWOCOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/SWOCOM.f
+END
+flatme.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/flatme.f
+END
+radslab.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/radslab.f
+END
+hsflux.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/255/branches/coal_1/core/src/model/hsflux.f
+END
+AMM.f
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/AMM.f
+END
+ZMEAN.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ZMEAN.f
+END
+gwdrag.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/gwdrag.f
+END
+step.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/step.f
+END
+o3set_amip.f90
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/o3set_amip.f90
+END
+prtcd.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prtcd.f
+END
+co2_read.f
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/co2_read.f
+END
+ETRANS3.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ETRANS3.f
+END
+PMASIV3.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/PMASIV3.f
+END
+WORKA.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/WORKA.f
+END
+prtcl.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prtcl.f
+END
+hist_save.f
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hist_save.f
+END
+VERSION.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/VERSION.f
+END
+CHMAP.f
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/CHMAP.f
+END
+O3AMIP.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/O3AMIP.f
+END
+initfs.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/initfs.f
+END
+icestat.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/icestat.f
+END
+matrix.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/matrix.f
+END
+prdaily.f
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/prdaily.f
+END
+rads_l.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/rads_l.f
+END
+TABCOM.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/TABCOM.f
+END
+physgm.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/physgm.f
+END
+log.txt
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/log.txt
+END
+DIFM.f
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/DIFM.f
+END
+ocforce.F
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/ocforce.F
+END
+hstring.f90
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/hstring.f90
+END
+filewr.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/253/branches/coal_1/core/src/model/filewr.f
+END
+semiis.f
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/CSIRO_Mk3L/!svn/ver/252/branches/coal_1/core/src/model/semiis.f
+END

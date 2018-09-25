@@ -1,0 +1,674 @@
+c Purpose
+c -------
+c Reads the data from an ocean model restart file.
+c
+c Inputs
+c ------
+c None
+c
+c Outputs
+c -------
+c None
+c
+c History
+c -------
+c 2015 Dec 9    Pearse J Buchanan
+c     - clean up of section for reading in biogeochemical tracer fields
+c
+c 2008 Mar 8	Steven Phipps	Original version
+
+      subroutine orest_read()
+
+      implicit none
+
+      include 'netcdf.inc'
+
+C Global parameters
+      include 'OPARAMS.f'
+
+C Argument list
+
+C Global data blocks
+      include 'ORESTART.f'
+
+C Local work arrays and variables
+      character*8 file
+      integer ncid, status, varid
+      parameter (file = "orest.nc")
+* rjm
+      character*6 obgc_tr
+      integer m
+* rjm
+
+C Start code : ------------------------------------------------------------
+
+c...  Open netCDF file
+      status = nf_open(trim(file), nf_nowrite, ncid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not open file ", file
+        write (*, *)
+        stop
+      end if
+
+c...  Get the timestep counter [ITT]
+      status = nf_inq_varid(ncid, "itt", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  itt"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, itt)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  itt"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the model time [TTSEC]
+      status = nf_inq_varid(ncid, "ttsec", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ttsec"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, ttsec)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ttsec"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the surface area of the world ocean [AREA]
+      status = nf_inq_varid(ncid, "area", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file 
+        write (*, *) "***  Variable =  area"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, area)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  area"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the volume of the world ocean [VOLUME]
+      status = nf_inq_varid(ncid, "volume", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file 
+        write (*, *) "***  Variable =  volume"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, volume)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  volume"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the barotropic streamfunction for the previous timestep [PB]
+      status = nf_inq_varid(ncid, "pb", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  pb"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, pb)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  pb"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the barotropic streamfunction for the current timestep [P]
+      status = nf_inq_varid(ncid, "p", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  p"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, p)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  p"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the inverse depth on the velocity grid [HR]
+      status = nf_inq_varid(ncid, "hr", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  hr"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, hr)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  hr"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the change in the barotropic streamfunction times two [PTD2]
+      status = nf_inq_varid(ncid, "ptd2", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ptd2"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, ptd2)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ptd2"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting indices for the vorticity [ISZ]
+      status = nf_inq_varid(ncid, "isz", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isz"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, isz)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isz"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending indices for the vorticity [IEZ]
+      status = nf_inq_varid(ncid, "iez", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iez"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, iez)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iez"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting I indices for the island boxes [ISIS]
+      status = nf_inq_varid(ncid, "isis", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isis"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, isis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isis"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending I indices for the island boxes [IEIS]
+      status = nf_inq_varid(ncid, "ieis", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieis"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, ieis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieis"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting J indices for the island boxes [JSIS]
+      status = nf_inq_varid(ncid, "jsis", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jsis"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, jsis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jsis"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending J indices for the island boxes [JEIS]
+      status = nf_inq_varid(ncid, "jeis", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jeis"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, jeis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jeis"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting indices for filtering T [ISTF]
+      status = nf_inq_varid(ncid, "istf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  istf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, istf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  istf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending indices for filtering T [IETF]
+      status = nf_inq_varid(ncid, "ietf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ietf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, ietf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ietf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting indices for filtering U and V [ISUF]
+      status = nf_inq_varid(ncid, "isuf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isuf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, isuf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isuf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending indices for filtering U and V [IEUF]
+      status = nf_inq_varid(ncid, "ieuf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieuf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, ieuf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieuf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the starting indices for filtering vorticity [ISZF]
+      status = nf_inq_varid(ncid, "iszf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iszf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, iszf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iszf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the ending indices for filtering vorticity [IEZF]
+      status = nf_inq_varid(ncid, "iezf", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iezf"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, iezf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iezf"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the temperatures [TEMP]
+      status = nf_inq_varid(ncid, "temp", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  temp"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, odam_t(:, :, :, 1, :))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  temp"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the salinities [SAL]
+      status = nf_inq_varid(ncid, "sal", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  sal"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, odam_t(:, :, :, 2, :))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  sal"
+        write (*, *)
+        stop
+      end if
+
+* rjm obgc - read in the biogeochemical tracers
+      if (nt.gt.2) then
+         do m=3,nt
+            
+            write(obgc_tr,'(a5,i1)') "obgc0",m
+            if (m.gt.9) then
+               write(obgc_tr,'(a4,i2)') "obgc",m
+            endif
+            
+            print*,obgc_tr
+
+            status = nf_inq_varid(ncid, obgc_tr, varid)
+            if (status .ne. nf_noerr) then
+               write (*, *)
+               write (*, *) "***  netCDF error: Could not 
+     +                       get variable ID"
+               write (*, *)
+               write (*, *) "***  File     =  ", file
+               write (*, *) "***  Variable = ",obgc_tr
+               write (*, *)
+               stop
+            end if
+            status = nf_get_var_double(ncid, varid, 
+     +                                 odam_t(:, :, :, m, :))
+            if (status .ne. nf_noerr) then
+               write (*, *)
+               write (*, *) "***  netCDF error: Could not read data"
+               write (*, *)
+               write (*, *) "***  File     =  ", file
+               write (*, *) "***  Variable = ",obgc_tr
+               write (*, *)
+               stop
+            end if
+
+         enddo
+      endif
+* rjm
+
+c...  Get the zonal velocities [U]
+      status = nf_inq_varid(ncid, "u", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  u"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, odam_u)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  u"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the meridional velocities [V]
+      status = nf_inq_varid(ncid, "v", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  v" 
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_double(ncid, varid, odam_v)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  v"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the number of vertical levels on the tracer grid [KMT]
+      status = nf_inq_varid(ncid, "kmt", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmt"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, kmt)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmt"
+        write (*, *)
+        stop
+      end if
+
+c...  Get the number of vertical levels on the velocity grid [KMU]
+      status = nf_inq_varid(ncid, "kmu", varid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not get variable ID"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmu"
+        write (*, *)
+        stop
+      end if
+      status = nf_get_var_int(ncid, varid, kmu)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not read data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmu"
+        write (*, *)
+        stop
+      end if
+
+c...  Close netCDF file
+      status = nf_close(ncid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not close file ", file
+        write (*, *)
+        stop
+      end if
+
+      return
+      end subroutine

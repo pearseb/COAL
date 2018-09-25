@@ -1,0 +1,834 @@
+c Purpose
+c -------
+c Writes the data to an ocean model restart file.
+c
+c Inputs
+c ------
+c None
+c
+c Outputs
+c -------
+c None
+c
+c History
+c -------
+c 2008 Mar 8	Steven Phipps	Original version
+c 2009 Apr 22	Steven Phipps	Modified for five-character experiment names
+
+      subroutine orest_write()
+
+      implicit none
+
+      include 'netcdf.inc'
+
+C Global parameters
+      include 'OPARAMS.f'
+
+C Argument list
+
+C Global data blocks
+      include 'FILES.f'
+      include 'ORESTART.f'
+      include 'VERSION.f'
+
+C Local work arrays and variables
+      character*8 file
+      integer ncid, status, imtid, jmtid, kmid, lsegid, lsegfid,
+     &        nisleid, njtbftid, njtbfuid, nstep2id, ittid, ttsecid,
+     &        areaid, volumeid, pbid, pid, hrid, ptd2id, iszid, iezid,
+     &        isisid, ieisid, jsisid, jeisid, istfid, ietfid, isufid,
+     &        ieufid, iszfid, iezfid, tid, sid, uid, vid, kmtid, kmuid
+      parameter (file = "orest.nc")
+* rjm
+      character*6 obgc_tr
+      integer obgc_id(nt)
+      integer m
+* rjm
+
+C Start code : ------------------------------------------------------------
+
+c...  Create netCDF file
+      status = nf_create(trim(file), nf_write, ncid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not create file ", file
+        write (*, *)
+        stop
+      end if
+
+c...  Define dimensions
+      status = nf_def_dim(ncid, "imt", imt, imtid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  imt"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "jmt", jmt, jmtid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  jmt"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "km", km, kmid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  km"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "lseg", lseg, lsegid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  lseg"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "lsegf", lsegf, lsegfid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  lsegf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "nisle", nisle, nisleid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  nisle"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "njtbft", njtbft, njtbftid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  njtbft"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "njtbfu", njtbfu, njtbfuid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  njtbfu"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_dim(ncid, "nstep2", 2, nstep2id)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define dimension"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Dimension =  nstep2"
+        write (*, *)
+        stop
+      end if
+
+c...  Define variables
+      status = nf_def_var(ncid, "itt", nf_int, 0, 0, ittid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  itt"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "ttsec", nf_double, 0, 0, ttsecid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ttsec"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "area", nf_double, 0, 0, areaid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  area"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "volume", nf_double, 0, 0, volumeid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  volume"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "pb", nf_double, 2, (/ imtid, jmtid /),
+     &                    pbid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  pb"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "p", nf_double, 2, (/ imtid, jmtid /),
+     &                    pid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  p"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "hr", nf_double, 2, (/ imtid, jmtid /),
+     &                    hrid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  hr"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "ptd2", nf_double, 3,
+     &                    (/ imtid, jmtid, nstep2id /), ptd2id)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ptd2"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "isz", nf_int, 2, (/ jmtid, lsegid /),
+     &                    iszid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isz"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "iez", nf_int, 2, (/ jmtid, lsegid /),
+     &                    iezid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iez"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "isis", nf_int, 1, nisleid, isisid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file 
+        write (*, *) "***  Variable =  isis" 
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "ieis", nf_int, 1, nisleid, ieisid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieis"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "jsis", nf_int, 1, nisleid, jsisid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jsis"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "jeis", nf_int, 1, nisleid, jeisid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jeis"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "istf", nf_int, 3,
+     &                    (/ njtbftid, lsegfid, kmid /), istfid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  istf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "ietf", nf_int, 3, 
+     &                    (/ njtbftid, lsegfid, kmid /), ietfid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ietf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "isuf", nf_int, 3, 
+     &                    (/ njtbfuid, lsegfid, kmid /), isufid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isuf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "ieuf", nf_int, 3,
+     &                    (/ njtbfuid, lsegfid, kmid /), ieufid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieuf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "iszf", nf_int, 2,
+     &                    (/ njtbfuid, lsegfid /), iszfid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iszf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "iezf", nf_int, 2,
+     &                    (/ njtbfuid, lsegfid /), iezfid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iezf"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "temp", nf_double, 4,
+     &                    (/ imtid, jmtid, kmid, nstep2id /), tid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  temp"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "sal", nf_double, 4,
+     &                    (/ imtid, jmtid, kmid, nstep2id /), sid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  sal"
+        write (*, *)
+        stop
+      end if
+
+* rjm obgc
+	if (nt.gt.2) then
+	do m=3,nt
+	write(obgc_tr,'(a5,i1)') "obgc0",m
+	if (m.gt. 9) write(obgc_tr,'(a4,i2)') "obgc",m
+	print*,obgc_tr
+
+      status = nf_def_var(ncid, obgc_tr, nf_double, 4,
+     &         (/ imtid, jmtid, kmid, nstep2id /), obgc_id(m) )
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable = ",obgc_tr
+        write (*, *)
+        stop
+      end if
+
+      enddo
+      endif
+* rjm
+
+      status = nf_def_var(ncid, "u", nf_double, 4,
+     &                    (/ imtid, jmtid, kmid, nstep2id /), uid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  u"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "v", nf_double, 4,
+     &                    (/ imtid, jmtid, kmid, nstep2id /), vid) 
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  v"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "kmt", nf_int, 2, (/ imtid, jmtid /),
+     &                    kmtid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmt"
+        write (*, *)
+        stop
+      end if
+      status = nf_def_var(ncid, "kmu", nf_int, 2, (/ imtid, jmtid /),
+     &                    kmuid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not define variable"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmu"
+        write (*, *)
+        stop
+      end if
+
+c...  Put global attributes
+      status = nf_put_att_text(ncid, nf_global, "version",
+     &                         len(trim(version)), trim(version))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not put attribute"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Attribute =  version"
+        write (*, *)
+        stop
+      end if
+      status = nf_put_att_text(ncid, nf_global, "runtype", 5, runtype)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not put attribute"
+        write (*, *)
+        write (*, *) "***  File      =  ", file
+        write (*, *) "***  Attribute =  runtype"
+        write (*, *)
+        stop
+      end if
+
+c...  Exit define mode
+      status = nf_enddef(ncid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not exit define mode"
+        write (*, *)
+        write (*, *) "***  File =  ", file
+        write (*, *)
+        stop
+      end if
+
+c...  Write the timestep counter [ITT]
+      status = nf_put_var_int(ncid, ittid, itt)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  itt"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the model time [TTSEC]
+      status = nf_put_var_double(ncid, ttsecid, ttsec)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ttsec"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the surface area of the world ocean [AREA]
+      status = nf_put_var_double(ncid, areaid, area)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  area"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the volume of the world ocean [VOLUME]
+      status = nf_put_var_double(ncid, volumeid, volume)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  volume"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the barotropic streamfunction for the previous timestep [PB]
+      status = nf_put_var_double(ncid, pbid, pb)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  pb"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the barotropic streamfunction for the current timestep [P]
+      status = nf_put_var_double(ncid, pid, p)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  p"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the inverse depth on the velocity grid [HR]
+      status = nf_put_var_double(ncid, hrid, hr)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  hr"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the change in the barotropic streamfunction times two [PTD2]
+      status = nf_put_var_double(ncid, ptd2id, ptd2)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ptd2"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting indices for the vorticity [ISZ]
+      status = nf_put_var_int(ncid, iszid, isz)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isz"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending indices for the vorticity [IEZ]
+      status = nf_put_var_int(ncid, iezid, iez)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iez"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting I indices for the island boxes [ISIS]
+      status = nf_put_var_int(ncid, isisid, isis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isis"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending I indices for the island boxes [IEIS]
+      status = nf_put_var_int(ncid, ieisid, ieis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieis"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting J indices for the island boxes [JSIS]
+      status = nf_put_var_int(ncid, jsisid, jsis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jsis"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending J indices for the island boxes [JEIS]
+      status = nf_put_var_int(ncid, jeisid, jeis)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  jeis"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting indices for filtering T [ISTF]
+      status = nf_put_var_int(ncid, istfid, istf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  istf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending indices for filtering T [IETF]
+      status = nf_put_var_int(ncid, ietfid, ietf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ietf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting indices for filtering U and V [ISUF]
+      status = nf_put_var_int(ncid, isufid, isuf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  isuf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending indices for filtering U and V [IEUF]
+      status = nf_put_var_int(ncid, ieufid, ieuf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  ieuf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the starting indices for filtering vorticity [ISZF]
+      status = nf_put_var_int(ncid, iszfid, iszf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iszf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the ending indices for filtering vorticity [IEZF]
+      status = nf_put_var_int(ncid, iezfid, iezf)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  iezf"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the temperatures [TEMP]
+      status = nf_put_var_double(ncid, tid, odam_t(:, :, :, 1, :))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  temp"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the temperatures [SAL]
+      status = nf_put_var_double(ncid, sid, odam_t(:, :, :, 2, :))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  sal"
+        write (*, *)
+        stop
+      end if
+
+* rjm obgc
+	if (nt.gt.2) then
+c...  Write the obgc tracers [obgc01]
+	do m=3,nt
+	write(obgc_tr,'(a5,i1)') "obgc0",m
+	if (m.gt. 9) write(obgc_tr,'(a4,i2)') "obgc",m
+	print*,obgc_tr
+	
+      status =nf_put_var_double(ncid, obgc_id(m),odam_t(:, :, :, m, :))
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable = ",obgc_tr
+        write (*, *)
+        stop
+      end if
+
+      enddo
+      endif
+* rjm
+
+c...  Write the zonal velocities [U]
+      status = nf_put_var_double(ncid, uid, odam_u)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  u"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the meridional velocities [V]
+      status = nf_put_var_double(ncid, vid, odam_v)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  v"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the number of vertical levels on the tracer grid [KMT]
+      status = nf_put_var_int(ncid, kmtid, kmt)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmt"
+        write (*, *)
+        stop
+      end if
+
+c...  Write the number of vertical levels on the velocity grid [KMU]
+      status = nf_put_var_int(ncid, kmuid, kmu)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not write data"
+        write (*, *)
+        write (*, *) "***  File     =  ", file
+        write (*, *) "***  Variable =  kmu"
+        write (*, *)
+        stop
+      end if
+
+c...  Close netCDF file
+      status = nf_close(ncid)
+      if (status .ne. nf_noerr) then
+        write (*, *)
+        write (*, *) "***  netCDF error: Could not close file ", file
+        write (*, *)
+        stop
+      end if
+
+      return
+      end subroutine

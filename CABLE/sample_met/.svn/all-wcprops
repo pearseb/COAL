@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met
+END
+metTH.nc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metTH.nc
+END
+metTH_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metTH_igbp.nc
+END
+metHV_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metHV_igbp.nc
+END
+metHV_hourly.nc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metHV_hourly.nc
+END
+Hyytiala_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Hyytiala_igbp.nc
+END
+Tumbarumba2001-07.nc
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tumbarumba2001-07.nc
+END
+Tumbarumba2001-08.nc
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tumbarumba2001-08.nc
+END
+Tumbarumba2002-06_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tumbarumba2002-06_igbp.nc
+END
+metTHpatches.nc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metTHpatches.nc
+END
+metHV_hh_1992_2006.nc
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metHV_hh_1992_2006.nc
+END
+readme
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/readme
+END
+metBV97_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metBV97_igbp.nc
+END
+metBV98_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metBV98_igbp.nc
+END
+Tumbarumba_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tumbarumba_igbp.nc
+END
+metBV99_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metBV99_igbp.nc
+END
+Metolius_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Metolius_igbp.nc
+END
+metDH_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/metDH_igbp.nc
+END
+Weidenbrunnen_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Weidenbrunnen_igbp.nc
+END
+WalkerBranch_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/WalkerBranch_igbp.nc
+END
+spinup.nml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/spinup.nml
+END
+Tharandt_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tharandt_igbp.nc
+END
+Hyytiala2002-05.nc
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Hyytiala2002-05.nc
+END
+Tumbarumba.txt
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Tumbarumba.txt
+END
+Littlewashita_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Littlewashita_igbp.nc
+END
+Bondville_igbp.nc
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/sample_met/Bondville_igbp.nc
+END

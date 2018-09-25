@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/CSIRO_Mk3L/!svn/ver/313/branches/coal_1/core/src/model/CABLE
+END
+Makefile_offline
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/Makefile_offline
+END
+casa_inout.f90
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/CSIRO_Mk3L/!svn/ver/299/branches/coal_1/core/src/model/CABLE/casa_inout.f90
+END
+cable_input.f90
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_input.f90
+END
+cable_checks.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_checks.f90
+END
+cable_parameters.f90
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/CSIRO_Mk3L/!svn/ver/313/branches/coal_1/core/src/model/CABLE/cable_parameters.f90
+END
+CABLE_Mk3L.f90
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/CSIRO_Mk3L/!svn/ver/297/branches/coal_1/core/src/model/CABLE/CABLE_Mk3L.f90
+END
+casa_cable.f90
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/CSIRO_Mk3L/!svn/ver/297/branches/coal_1/core/src/model/CABLE/casa_cable.f90
+END
+cable_abort.f90
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_abort.f90
+END
+cable_radiation.f90
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_radiation.f90
+END
+cable_air.f90
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable_air.f90
+END
+cable_define_types.f90
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_define_types.f90
+END
+cable_photosynthetic_constants.f90
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_photosynthetic_constants.f90
+END
+cable_define_dimensions.f90
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_define_dimensions.f90
+END
+rungswp_10years
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/rungswp_10years
+END
+cable_canopy.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_canopy.f90
+END
+cable_write.f90
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_write.f90
+END
+cable_initialise.f90
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/CSIRO_Mk3L/!svn/ver/313/branches/coal_1/core/src/model/CABLE/cable_initialise.f90
+END
+cable_output.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable_output.f90
+END
+cable_cbm.f90
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable_cbm.f90
+END
+cable_iovars.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_iovars.f90
+END
+cable_carbon.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_carbon.f90
+END
+cable_physical_constants.f90
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_physical_constants.f90
+END
+cable.nml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable.nml
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/repos/CSIRO_Mk3L/!svn/ver/300/branches/coal_1/core/src/model/CABLE/README
+END
+cable_read.f90
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_read.f90
+END
+cable_soilsnow.f90
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repos/CSIRO_Mk3L/!svn/ver/287/branches/coal_1/core/src/model/CABLE/cable_soilsnow.f90
+END
+cable_roughness.f90
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_roughness.f90
+END
+cable_other_constants.f90
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_other_constants.f90
+END
+casa_cnp.f90
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/CSIRO_Mk3L/!svn/ver/299/branches/coal_1/core/src/model/CABLE/casa_cnp.f90
+END
+cable_math_constants.f90
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/CSIRO_Mk3L/!svn/ver/259/branches/coal_1/core/src/model/CABLE/cable_math_constants.f90
+END
+casa_variable.f90
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/repos/CSIRO_Mk3L/!svn/ver/297/branches/coal_1/core/src/model/CABLE/casa_variable.f90
+END
+cable_albedo.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable_albedo.f90
+END
+cable_driver.f90
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/CSIRO_Mk3L/!svn/ver/265/branches/coal_1/core/src/model/CABLE/cable_driver.f90
+END

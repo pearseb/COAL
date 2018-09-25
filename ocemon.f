@@ -1,0 +1,882 @@
+# 1 "ocemon.F"
+c 2015 Dec 9    Pearse J Buchanan
+c   - cleaned up code for calculating monthly averages for the
+c       biogeochemical tracers
+c
+c (1) Further modifications to the ocean model output routines to improve
+c     memory usage. The features that were causing stack overflows have now
+c     been resolved.
+c (2) End-of-month work transferred to a new subroutine, OCEMON.
+c SJP 2009/05/11
+c
+c Modifying the ocean model output routines for improved memory usage.
+c SJP 2009/05/06
+c
+c Adding density as an ocean model statistic.
+c SJP 2009/04/21
+c
+c Enabling user control over the ocean model statistics that are saved to file.
+c SJP 2009/04/19
+c
+c Incorporating the code which calculates the meridional overturning
+c streamfunctions into the core model source code.
+c SJP 2009/04/17
+c
+c Fixed so that KMT, rather than KMU, is written to the output file.
+c SJP 2008/03/08
+c
+c Modified for coupling of the new, high-resolution version of the ocean model
+c to the atmosphere.
+c SJP 2007/12/20
+c
+c Rationalise the NAMELIST input for the ocean model.
+c SJP 2007/11/24
+c
+c Corrected the preprocessor directives.
+c SJP 2007/10/24
+c
+c Corrected the calculation of the longitudes for the new ocean model grid.
+c SJP 2007/10/18
+c
+c Subroutine OCENDC merged into subroutine OCEND.
+c SJP 2007/06/20
+c
+c Major tidy-up of ocean model source code.
+c SJP 2007/06/18
+c
+c (1) Modified to enable the new ocean model grid.
+c (2) In both OCEND and OCENDC, removed redundant references to the array HSUM
+c     and the header file ICEOC.f.
+c SJP 2007/06/01
+c
+c Added the line "include 'PARAMS.f'" to subroutines OCEND and OCENDC, as this
+c line is no longer included via the header file OPARAMS.f.
+c SJP 2007/05/31
+c
+c Added IMPLICIT NONE statements, plus variable declarations as necessary.
+c SJP 2007/05/30
+c
+c Transferred COMMON block declarations to separate header files.
+c SJP 2007/05/29
+c
+c Modified to enable relaxation of the coupled model SSTs and SSSs towards
+c prescribed values.
+c SJP 2006/01/05
+c
+c Removed array YT, and modified so that RADIAN*PHIT is written to the output
+c file instead. This fixes an error whereby the latitude values written to the
+c output file were incorrect.
+c SJP 2005/03/19
+c
+c Removed writing of restart file every NWRITE timesteps in OCEND.
+c SJP 2004/02/14
+c
+c Removed redundant code from OCENDC.
+c SJP 2004/01/06
+c
+c (1) Modified so that the Gent-McWilliams eddy parameterisation scheme is
+c always used, enabling some optimisation. The parameter IGM is thus rendered
+c irrelevant.
+c (2) Some tidying up.
+c SJP 2003/12/20
+c
+c Output once again combined, so that it is all written to Fortran unit 40. All
+c REAL data is converted to 32-bit precision beforehand.
+c SJP 2003/09/04
+c
+c Modified to make use of /orestart/.
+c SJP 2003/09/03
+c
+c In OCEND, writes to Fortran units 67, 95, 96, 97 and 99 commented out.
+c Parameter definitions moved to include file OPARAMS.f.
+c SJP 2003/04/29
+c
+c In OCENDC, writes to fort.40, fort.91 and fort.94 returned to their
+c original form. Writes to all other units remain commented out.
+c SJP 2002/07/11
+c
+c In OCENDC, writes to fort.32 (via calls to dwrt), fort.95 and fort.99
+c also commented out, as this output is not required. The data that was
+c previously written to fort.91 and fort.94 is now written to fort.40
+c instead, creating a single output file. Writes to this file now use
+c 32-bit precision, which is perfectly adequate and which reduces the
+c size of the resulting file by 50%.
+c SJP 2002/06/27
+c
+c Calculation of ITOP in OCENDC also fixed - previously, only the
+c calculation in OCEND had been fixed.
+c SJP 2002/06/26
+c
+c Writes to fort.67, fort.92, fort.96 and fort.97 in OCENDC commented
+c out, as all this data is already output to other units.
+c SJP 2002/06/24
+c
+c Fix to calculation of ITOP, the topography array, in order to avoid
+c errors arising from rounding.
+c SJP 2002/02/15
+c
+c$Log: ocend.f,v $
+cRevision 1.18  2000/06/20 02:08:32  rot032
+cHBG changes to V5-3-3, mainly for coupled model
+c
+cRevision 1.17  1998/12/10 00:55:32  ldr
+cHBG changes to V5-1-21
+c
+c Revision 1.16  1998/05/26  04:48:56  ldr
+c Final changes (inc. ACH salinity stuff) for 10k run.
+c
+c Revision 1.15  1997/12/19  01:25:33  ldr
+c Changes from ACH for 21 OGCM levels and optinal GM mixing scheme...
+c
+c Include array eddplt, to hold uedd, vedd, wedd
+c Find monthly averages of these quantities, save to fort.94 and clear
+c Change to 21 levels in ocean model, and insertion of
+c eddy-induced transport (major changes delineated)
+c
+c Revision 1.14  1994/08/08  17:21:49  ldr
+c Strip off excessive RCS comments at top of file.
+c
+c Revision 1.13  94/08/04  16:56:05  ldr
+c Changes to V4-5-30l from HBG (clouds,coupled), IGW (tracers) and SPO (coupled)
+c
+c Revision 1.12  94/03/30  12:34:38  ldr
+c Changes to V4-5 from HBG and SPO for coupled and qflux runs
+c
+c Revision 1.11  93/12/17  15:33:14  ldr
+c Hack V4-4-52l to change all continuation chars to &
+c
+c Revision 1.10  93/11/03  11:44:22  ldr
+c Changes to V4-4-24l from HBG for coupled model
+c
+c Revision 1.9  93/10/05  13:06:47  ldr
+c Changes to V4-4-15l from HBG for T63 and coupled model
+c
+c Revision 1.8  93/08/10  15:27:40  ldr
+c Changes made by HBG to V4-3-28l to rationalize control of coupled model.
+c
+c Revision 1.7  93/02/03  12:44:49  ldr
+c SPO's minor changes to coupled model and sea-ice scheme of V4-1.
+c
+c Revision 1.6  92/12/11  11:55:40  ldr
+c More include files and uncomment write statements.
+c
+c Revision 1.5  92/12/10  09:55:24  ldr
+c Minor fixes.
+c
+      subroutine ocemon(lcouple)
+C
+C=======================================================================
+C   Routine to do end-of-month work for the ocean model              ===
+C=======================================================================
+C
+      implicit none
+
+      include 'OPARAMS.f'
+      include 'OCEAN_NML.f'
+      include 'ORESTART.f'
+      include 'SCALAR.f'
+      include 'ONEDIM.f'
+      include 'KTSIN.f'
+      include 'ATM2OC.f'
+      include 'MDAY.f'
+      include 'CRELAX.f'
+      include 'WORKSP.f'
+      include 'OHIST.f'
+
+* rjm
+      include 'bio.h'
+      include 'extra.h'
+* rjm
+
+C
+C---------------------------------------------------------------------
+C  DEFINE AND EQUIVALENCE LOCAL DATA; DEFINE NAMELIST INPUT
+C---------------------------------------------------------------------
+C
+      integer i, j, k, mtsim, ib, l
+      real dvint
+      real fmtsim
+      real missing_value
+      real secsyr
+      real ttyear
+      real veddstm(2:jmtm1, km, nbasin)
+      real veddint(nbasin)
+      real vint(nbasin)
+      real vstm(2:jmtm1, km, nbasin)
+      real vtstm(2:jmtm1, km, nbasin)
+      real xt(2:imtm1)
+      real xu(2:imtm1)
+      logical lcouple
+
+      parameter (missing_value = -1.0e34)
+      parameter (secsyr = 365.0*86400.0)
+
+c...  Calculate mtsim and fmtsim
+      mtsim=mdays(nmth)*knitd
+      fmtsim = real(mtsim)
+      write (6, *) 'month and points ', nmth, mtsim, mdays(nmth)
+
+c...  Calculate the monthly-mean values of the ocean model statistics and, as
+c...  necessary, convert to MKS units
+      if (save_smfzon) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_smfzon(i, j) = 0.1 * ohist_smfzon(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+      if (save_smfmer) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_smfmer(i, j) = 0.1 * ohist_smfmer(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+      if (save_stfht) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_stfht(i, j) = ohist_stfht(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+      if (save_stfsal) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_stfsal(i, j) = ohist_stfsal(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+      if (save_temp) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_temp(i, j, k) = ohist_temp(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_sal) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_sal(i, j, k) = 1000.0 * (ohist_sal(i, j, k) /
+     &                                       fmtsim) + 35.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_rho) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_rho(i, j, k) = 1000.0 * ohist_rho(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_u) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_u(i, j, k) = 0.01 * ohist_u(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_v .or. save_over) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_v(i, j, k) = 0.01 * ohist_v(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_w) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_w(i, j, k) = 0.01 * ohist_w(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_uedd) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_uedd(i, j, k) = 0.01 * ohist_uedd(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_vedd .or. save_over) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_vedd(i, j, k) = 0.01 * ohist_vedd(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_wedd) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_wedd(i, j, k) = 0.01 * ohist_wedd(i, j, k) / fmtsim
+            end do
+          end do
+        end do
+      end if
+
+      if (save_res) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_res(i, j) = 1.0e-12 * ohist_res(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+      if (save_cdepthm) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_cdepthm(i, j) = ohist_cdepthm(i, j) / 100.0
+          end do
+        end do
+      end if
+
+* rjm
+      do l = 1,nt
+         do k = 1,km
+            do j = 1,jmt
+               do i = 1,imt
+                  
+                  ave_tr(i,j,k,l) = ave_tr(i,j,k,l) / fmtsim
+                 
+                  if (ave_tr(i,j,k,l).eq.0) then
+                     ave_tr(i,j,k,l) = -9999.9
+                  endif
+               
+               enddo
+            enddo
+         enddo
+      enddo
+
+      do k = 1,nbio2d
+         do j = 1,jmt
+            do i = 1,imt
+            
+               ave_flux(i,j,k) = ave_flux(i,j,k)/fmtsim
+               if (ave_flux(i,j,k).eq.0 .and. 
+     +             ave_tr(i,j,k,1).eq.-9999.9) then
+                   ave_flux(i,j,k) = -9999.9
+               endif
+
+            enddo
+         enddo
+      enddo
+* rjm
+
+      do k = 1,km
+         do j = 1,jmt
+            do i = 1,imt
+               
+               if (den) ave_Pden(i,j,k,1) = ave_Pden(i,j,k,1) / fmtsim
+               ave_oxyneg(i,j,k,1) = ave_oxyneg(i,j,k,1) / fmtsim
+               if (fix) ave_fix(i,j,k,1) = ave_fix(i,j,k,1) / fmtsim
+               ave_exp(i,j,k,1) = ave_exp(i,j,k,1) / fmtsim
+              
+               if (ReminDiagnostics) then
+                  ave_pop(i,j,k,1) = ave_pop(i,j,k,1) / fmtsim
+                  ave_optot(i,j,k,1) = ave_optot(i,j,k,1) / fmtsim
+                  ave_oprem(i,j,k,1) = ave_oprem(i,j,k,1) / fmtsim
+                  ave_opden(i,j,k,1) = ave_opden(i,j,k,1) / fmtsim
+               endif
+               
+               if (diff_out) then
+                  ave_Udif(i,j,k,1) = ave_Udif(i,j,k,1) / fmtsim
+                  ave_Vdif(i,j,k,1) = ave_Vdif(i,j,k,1) / fmtsim
+                  ave_Wdif(i,j,k,1) = ave_Wdif(i,j,k,1) / fmtsim
+                  ave_Gar84(i,j,k,1) = ave_Gar84(i,j,k,1) / fmtsim
+               endif
+               
+            enddo
+         enddo
+      enddo
+      
+      if (vary_stoich) then
+      do j = 1,jmt
+         do i = 1,imt
+            
+            ave_carb2P(i,j,1) = ave_carb2P(i,j,1) / fmtsim
+            ave_NtoP(i,j,1) = ave_NtoP(i,j,1) / fmtsim
+            ave_o2rem(i,j,1) = ave_o2rem(i,j,1) / fmtsim
+            ave_no3rem(i,j,1) = ave_no3rem(i,j,1) / fmtsim
+               
+         enddo
+      enddo
+      endif
+      
+      if (sedfluxes) then
+      do k = 1,km
+         do j = 1,jmt
+            do i = 1,imt
+               
+               ave_opsed(i,j,k,1) = ave_opsed(i,j,k,1) / fmtsim
+               ave_opsed_f(i,j,k,1) = ave_opsed_f(i,j,k,1) / fmtsim
+               ave_icsed(i,j,k,1) = ave_icsed(i,j,k,1) / fmtsim
+               ave_sised(i,j,k,1) = ave_sised(i,j,k,1) / fmtsim
+               
+               ave_Sden(i,j,k,1) = ave_Sden(i,j,k,1) / fmtsim
+               ave_Ssul(i,j,k,1) = ave_Ssul(i,j,k,1) / fmtsim
+
+               if (n_n15.gt.0) then
+                  ave_d15N(i,j,k,1) = ave_d15N(i,j,k,1) / fmtsim
+               endif
+
+            enddo
+         enddo
+      enddo
+      endif 
+            
+      if (ReminTemp_Marsay .or. ReminTemp_Q10 .or. ReminPico) then
+      do j = 1,jmt
+         do i = 1,imt
+            
+            ave_MCb(i,j,1) = ave_MCb(i,j,1) / fmtsim
+               
+         enddo
+      enddo
+      endif
+
+
+c...  If this is the coupled model and CRELAX_FLAG is true, calculate the
+c...  monthly-mean values of CRELAX_STFHT and CRELAX_STFSAL
+      if (lcouple .and. crelax_flag) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            crelax_stfht(i, j) = crelax_stfht(i, j) / fmtsim
+            crelax_stfsal(i, j) = crelax_stfsal(i, j) / fmtsim
+          end do
+        end do
+      end if
+
+c------------------------------------------------------
+c     Derive the meridional overturning streamfunctions
+c------------------------------------------------------
+
+      if (save_over) then
+
+c.....  Compute basin and global integrals
+        do j = 2, jmtm1
+          do k = km, 1, -1
+
+c.....  Zero arrays to hold zonal integrals
+            do ib = 1, nbasin
+              vint(ib) = 0.0
+              veddint(ib) = 0.0
+            end do
+
+c.....  Loop over longitudes
+            do i = 2, imtm1
+
+c.....  Add large-scale meridional velocity to the zonal integrals
+              if (kmu(i, j) .ge. k) then
+                dvint = dxu(i) * cs(j) * dz(k) * ohist_v(i, j, k)
+                vint(nbasin) = vint(nbasin) - dvint
+                do ib = 1, nbasin-1
+                  if (basin(i, j) .eq. ib) vint(ib) = vint(ib) - dvint
+                end do
+              end if
+
+c.....  Add eddy-induced meridional velocity to the zonal integrals
+              if ((kmt(i, j) .ge. k) .and. (kmt(i, j+1) .ge. k)) then
+                dvint = dxu(i) * cs(j) * dz(k) * ohist_vedd(i, j, k)
+                veddint(nbasin) = veddint(nbasin) - dvint
+                do ib = 1, nbasin-1
+                  if (basin(i, j) .eq. ib) veddint(ib) = veddint(ib) -
+     &                                                   dvint
+                end do
+              end if
+
+            end do
+
+c.....  Transfer zonal integrals to output arrays
+            if (k .eq. km) then
+              do ib = 1, nbasin
+                vstm(j, k, ib) = vint(ib)
+                veddstm(j, k, ib) = veddint(ib)
+                vtstm(j, k, ib) = vstm(j, k, ib) + veddstm(j, k, ib)
+              end do
+            else
+              do ib = 1, nbasin
+                vstm(j, k, ib) = vstm(j, k+1, ib) + vint(ib)
+                veddstm(j, k, ib) = veddstm(j, k+1, ib) + veddint(ib)
+                vtstm(j, k, ib) = vstm(j, k, ib) + veddstm(j, k, ib)
+              end do
+            end if
+
+          end do
+        end do
+
+c.....  Convert to Sv - the conversion factor is 1.0e-10, because the
+c.....  velocities have been converted to m s-1 - and set missing values
+        do ib = 1, nbasin
+          do k = 1, km
+            do j = 2, jmtm1
+              if (vmask(j, k, ib)) then
+                vstm(j, k, ib) = 1.0e-10 * vstm(j, k, ib)
+              else
+                vstm(j, k, ib) = missing_value
+              end if
+              if (veddmask(j, k, ib)) then
+                veddstm(j, k, ib) = 1.0e-10 * veddstm(j, k, ib)
+              else
+                veddstm(j, k, ib) = missing_value
+              end if
+              if (vmask(j, k, ib) .or. veddmask(j, k, ib)) then
+                vtstm(j, k, ib) = 1.0e-10 * vtstm(j, k, ib)
+              else
+                vtstm(j, k, ib) = missing_value
+              end if
+            end do
+          end do
+        end do
+
+      end if
+
+c-----------------------------------------------------------------------
+c     Save the monthly means to Fortran unit 40 for conversion to netCDF
+c-----------------------------------------------------------------------
+
+c...  Calculate the longitude values
+# 567
+
+      xt(2) = 0.0 - 0.5 * 360.0/real(imt-2)
+      xu(2) = 0.0
+
+      do 7880 i = 3, imtm1
+        xt(i) = xt(i-1) + (dxt(i) * radian / radius)
+        xu(i) = xu(i-1) + (dxu(i) * radian / radius)
+ 7880 continue
+
+c...  Calculate the date
+      ttyear = ttsec / secsyr
+
+c...  Write the data to Fortran unit 40
+      write (40) itt, real(dttsf, 4), real(ttyear, 4)
+      write (40) (real(xt(i), 4), i=2,imtm1),
+     &           (real(xu(i), 4), i=2,imtm1),
+     &           (real(radian*phit(j), 4), j=2,jmtm1),
+     &           (real(radian*phi(j), 4), j=2,jmtm1),
+     &           (real(0.01*zdzz(k), 4), k=1,km),
+     &           0.0_4, (real(0.01*zdz(k), 4), k=1,km-1)
+      write (40) ((kmt(i, j), i=2,imtm1), j=2,jmtm1),
+     &           ((kmu(i, j), i=2,imtm1), j=2,jmtm1)
+      write (40) save_smfzon, save_smfmer, save_stfht, save_stfsal,
+     &           save_temp, save_sal, save_rho, save_u, save_v, save_w,
+     &           save_uedd, save_vedd, save_wedd, save_res,
+     &           save_cdepthm, save_over
+      if (save_smfzon) write (40) ((real(ohist_smfzon(i, j), 4),
+     &                              i=2,imtm1), j=2,jmtm1)
+      if (save_smfmer) write (40) ((real(ohist_smfmer(i, j), 4),
+     &                              i=2,imtm1), j=2,jmtm1)
+      if (save_stfht)  write (40) ((real(ohist_stfht(i, j), 4),
+     &                              i=2,imtm1), j=2,jmtm1)
+      if (save_stfsal) write (40) ((real(ohist_stfsal(i, j), 4),
+     &                              i=2,imtm1), j=2,jmtm1)
+      if (save_temp) write (40) (((real(ohist_temp(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_sal)  write (40) (((real(ohist_sal(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_rho)  write (40) (((real(ohist_rho(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_u)    write (40) (((real(ohist_u(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+*rjm missing v!!!
+      if (save_v)    write (40) (((real(ohist_v(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_w)    write (40) (((real(ohist_w(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_uedd) write (40) (((real(ohist_uedd(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_vedd) write (40) (((real(ohist_vedd(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_wedd) write (40) (((real(ohist_wedd(i, j, k), 4),
+     &                             i=2,imtm1), j=2,jmtm1), k=1,km)
+      if (save_res)     write (40) ((real(ohist_res(i, j), 4),
+     &                               i=2,imtm1), j=2,jmtm1)
+      if (save_cdepthm) write (40) ((real(ohist_cdepthm(i, j), 4),
+     &                               i=2,imtm1), j=2,jmtm1)
+      if (save_over) then
+        write (40) (((real(vstm(j, k, ib), 4),
+     &                j=2,jmtm1), k=1,km), ib=1,nbasin)
+        write (40) (((real(veddstm(j, k, ib), 4),
+     &                j=2,jmtm1), k=1,km), ib=1,nbasin)
+        write (40) (((real(vtstm(j, k, ib), 4),
+     &                j=2,jmtm1), k=1,km), ib=1,nbasin)
+      end if
+* rjm
+*      if (nt.gt.2) then
+*         call obgc_write
+*      endif
+* rjm
+
+c...  Reset the ocean model history arrays
+      if (save_smfzon) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_smfzon(i, j) = 0.0
+          end do
+        end do
+      end if
+
+      if (save_smfmer) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_smfmer(i, j) = 0.0
+          end do
+        end do
+      end if
+
+      if (save_stfht) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_stfht(i, j) = 0.0
+          end do
+        end do
+      end if
+
+      if (save_stfsal) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_stfsal(i, j) = 0.0
+          end do
+        end do
+      end if
+
+      if (save_temp) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_temp(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_sal) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_sal(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_rho) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_rho(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_u) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_u(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_v .or. save_over) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_v(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_w) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_w(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_uedd) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_uedd(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_vedd .or. save_over) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_vedd(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_wedd) then
+        do k = 1, km
+          do j = 2, jmtm1
+            do i = 2, imtm1
+              ohist_wedd(i, j, k) = 0.0
+            end do
+          end do
+        end do
+      end if
+
+      if (save_res) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_res(i, j) = 0.0
+          end do
+        end do
+      end if
+
+      if (save_cdepthm) then
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            ohist_cdepthm(i, j) = zdz(1)
+          end do
+        end do
+      endif
+
+* rjm - reset the tracer fields to zero ready for the next timestep
+      do k = 1,nbio2d
+         do j = 1,jmt
+            do i = 1,imt
+             
+               ave_flux(i,j,k) = 0.
+
+            enddo
+         enddo
+      enddo
+      
+      if (vary_stoich) then
+      do j = 1,jmt
+         do i = 1,imt
+      
+            ave_carb2P(i,j,1) = 0.
+            ave_NtoP(i,j,1) = 0.
+            ave_o2rem(i,j,1) = 0.
+            ave_no3rem(i,j,1) = 0.
+               
+         enddo
+      enddo
+      endif
+     
+      if (sedfluxes) then
+      do k = 1,km
+         do j = 1,jmt
+            do i = 1,imt
+               
+               ave_opsed(i,j,k,1) = 0.0
+               ave_opsed_f(i,j,k,1) = 0.0
+               ave_icsed(i,j,k,1) = 0.0
+               ave_sised(i,j,k,1) = 0.0
+               
+               ave_Sden(i,j,k,1) = 0.0
+               ave_Ssul(i,j,k,1) = 0.0
+               
+               if (n_n15.gt.0) then
+                  ave_d15N(i,j,k,1) = 0.0
+               endif
+
+            enddo
+         enddo
+      enddo
+      endif 
+      
+      if (ReminTemp_Marsay .or. ReminTemp_Q10 .or. ReminPico) then
+      do j = 1,jmt
+         do i = 1,imt
+            
+            ave_MCb(i,j,1) = 0.0
+               
+         enddo
+      enddo
+      endif
+
+      do l = 1,nt
+         do k = 1,km
+            do j = 1,jmt
+               do i = 1,imt
+           
+                  ave_tr(i,j,k,l) = 0.
+
+                  if (l.eq.1) then
+                     ave_Pden(i,j,k,1) = 0.
+                     ave_fix(i,j,k,1) = 0.
+                     ave_exp(i,j,k,1) = 0.
+                     ave_oxyneg(i,j,k,1) = 0.
+                  
+                     if (ReminDiagnostics) then
+                        ave_pop(i,j,k,1) = 0.
+                        ave_optot(i,j,k,1) = 0.
+                        ave_oprem(i,j,k,1) = 0.
+                        ave_opden(i,j,k,1) = 0.
+                     endif
+                     if (diff_out) then
+                        ave_Udif(i,j,k,1) = 0.
+                        ave_Vdif(i,j,k,1) = 0.
+                        ave_Wdif(i,j,k,1) = 0.
+                        ave_Gar84(i,j,k,1) = 0.
+                     endif
+                  endif
+                  
+               enddo
+            enddo
+         enddo
+      enddo
+* rjm
+
+c...  If this is the coupled model and CRELAX_FLAG is true, write the arrays
+c...  CRELAX_STFHT and CRELAX_STFSAL to Fortran unit 41, and then reset them
+      if (lcouple .and. crelax_flag) then
+
+        write (41) ((real(crelax_stfht(i, j), 4), i=1,imt), j=1,jmt)
+        write (41) ((real(crelax_stfsal(i, j), 4), i=1,imt), j=1,jmt)
+
+        do j = 2, jmtm1
+          do i = 2, imtm1
+            crelax_stfht(i, j) = 0.0
+            crelax_stfsal(i, j) = 0.0
+          end do
+        end do
+
+      end if
+
+      RETURN
+      END

@@ -1,0 +1,159 @@
+
+c======================= include file "bio.h" ===========================
+c
+c	Additonal variable storage required by the biogeochemical module
+c
+***** iobiobc	- unit numbers for the random access files
+* Options variables
+* ivredc - allows the c:p  ratio to vary 
+*   =0 constant
+*   =1 c/p or o/p varies with pco2 in ocean
+*   =2 c/p or o/p varies with pco2 in atmos 
+* ivredo - allow the o:p:c ratios to vary
+*   =0 p/o fixed at namelist value
+*   =1 c/o fixed at namelist value
+* ivredpic
+*   =0 pic/pop 
+*   =1 pic/poc  
+
+* ipic - controls the pic to poc ratio
+*    =0 constant
+*    =1 varies with omega
+
+* pop		- stores new production and poceralization info
+* 	note: new production is stored in pop(i,1,j)
+* fmin_pop	- power law function for poceralization
+* poc           - store POC
+* ratio_pic- ratio_pop ratios of POP for the various tracers	
+* sediments	- store sediment accumulation at the ocean bottom
+* pic		- production and poceralization of PIC
+* rain_ratio	- ratio of PIC/POC fraction
+* fmin_pic	- function for PIC poceralization
+* ratio_pic	- ratio for PIC poceralization
+* terr_input - terrestrial input
+* var_satst - variable saturation state scaling based on Ridgwell 2007
+* pwr_sat       - additional scaling on the poc:pic based Ridgwell 2007
+* dizt	=  1/dzt
+c omegaca - store carbonate saturation state for calcite
+c omegaar - store carbonate satration state for aragonite
+c co2sol  - store the solubility of co2 in surface
+c fluxgas	- store air-sea fluxes for oxygen and CO2
+c pco2o	- store the sea surface pco2
+c x_co2	- gas exchange coefficient for CO2
+* pco2_atm	- atmospheric pco2
+* pco2a	- air pCO2
+* fc13a	- C13 fraction in air 
+c igas	- an index to specify the gas exchange to use
+c		0 - no gas exchange
+c		1 - oxygen gas exchange
+c		2 - CO2
+c		3 - F12 
+c		4 - F11
+c*		5 - C13
+* tglobal 	- stores the global average surface tracer concentration for the virtual fluxes
+*  Tracer indexes
+* n_pho  	- index for the nutrient limited tracer, if
+*		 0 new production is zero
+* n_dic	- index for the DIC tracer, if 0 dic=2000
+* n_alk	- index for the Alk tracer, if 0 alk=2431
+* n_c14	- index for simple c14 run
+* n_si		= index for the silca tracer
+* n_oxy	- oxygen index usually 3 and must be define for obgc
+* n_c13	- dic-c13 index  (needs n_dic to be defined)
+* n_fe		- index for iron tracer
+
+* obc  - biological surface bc
+* index 1  = windspeed
+* index 2  = phytoplankton growth
+* index 3  = surface pressure
+* index 4  = dust deposition
+
+* ======================================================
+        integer ngas,ntmax,n_pho,n_dic,n_alk,n_c14,n_si,n_oxy,n_c13,
+     1  n_fe,
+     1  ntdbc,maxbcr,npar,igas, ntm2,nbio2d,
+     1 idump,jdump,kdump,
+     1 nsum1,itlast
+     1 ,ivredc,ivredo,ipic
+
+	real poc,pop,pic,sediments,fmin_pop,ratio_pop,
+     1 dizt,tr_off,fmin_opal,opal,ratio_opal,terr_input,
+     1 rain_ratio,fmin_pic,ratio_pic,pwr_sat,var_satst(imt,jmt),
+     1 fluxgas,poc2,x_co2,pco2a,fc13a,pco2_atm,
+     1 pco2o,pmodel,omegaca,omegaar,co2sol,
+     1 ttflux,stflux,gCtppm,geo_seq,xdump,pdump,
+     1 p_k,s_npp,xmld,fpgr_temp, vmax,
+     1 obc,sbcbio,silicate,
+     1 atm_box,atm_box_tot,atm_box_ann,atm_box_pco2,
+     1 atm_box_rc,atm_box_tot_c13,atm_box_ann_c13,
+     1 p11,p12,pcfcatm,
+     1 zt,dzt,
+     1 Ro, dtr, 
+     1 ave_tr, ave_flux, tglobal
+
+	parameter (ngas=nt-2+1)
+	parameter (nbio2d = nt+8)
+	parameter (ntm2=nt-2+1)  ! add one to ensure it has a nonzero value
+	parameter (ntmax=11)
+	character *12 trname(nbio2d)
+        common /cbio11/ poc(imt,km,jmt),pop(imt,km,jmt),pic(imt,km,jmt),
+     1	sediments(imt,jmt), 
+     1	fmin_pop(km), ratio_pop(ntmax),terr_input,
+     1	rain_ratio,fmin_pic(km),ratio_pic(ntmax),pwr_sat,
+     1	 dizt(km),omegaca(imt,jmt),omegaar(imt,jmt),co2sol(imt,jmt)
+     1	, tr_off(ntmax),n_pho,n_dic,n_alk,n_c14,n_oxy,n_c13
+     1	, fmin_opal(km),opal(imt,km,jmt),ratio_opal(ntmax)
+     1	, n_si, n_fe
+     1  , ivredc,ivredo, ipic
+
+	common /cgas/ igas(ntmax),fluxgas(imt,jmt,ngas)
+     1	,pco2o(imt,jmt,ngas),x_co2(imt,jmt),pco2a,fc13a
+     1      ,pco2_atm(-1:1)
+     2	,ttflux(nt),stflux(nt),gCtppm,geo_seq(ntmax)
+     3      ,ave_tr(imt,jmt,km,nt),ave_flux(imt,jmt,nbio2d)
+     4	, tglobal(ntmax)
+
+	common /ceco/ p_k,s_npp,xmld(imt,jmt),
+	1	fpgr_temp(imt,jmt),vmax(imt,jmt)
+
+	common /cdumping/idump,jdump,kdump,xdump,pdump
+
+	common /obgc_names/ trname
+
+c
+c	Time dependent S.B.C. data for biogeochemical module 
+c     coded by:     rj matear 
+	parameter (ntdbc=4,maxbcr=12)
+	common /bio_bcr/ obc(imt,jmt,maxbcr,ntdbc)
+	common /bio_bcr/ sbcbio(imt,jmt,ntdbc)
+
+*   Parameters sizes for the ecosystem model.  See the 
+* ecosystem directory file param.h for additional parameters.
+	parameter (npar=16) 
+
+*  Initialize the Ecosystem model parameters and useful constants
+*
+*  Store the constants used by the ecosystem model
+	logical qrad
+	common /bio_const/ qrad, Ro, dtr
+
+* 	Storage of variables required to run the ecoystem model.  See
+* ecosystem directory file eco_input.h for additional variables.
+	dimension pmodel(npar)
+	common /eco_input/ pmodel
+	
+c...
+	dimension zt(kmp1),dzt(km)
+	equivalence (zt,zdzz), (dzt,dz)
+c...
+
+*  Include file for the cfc simulations
+*     coded by:     rj matear 
+
+	common /cfc_1/  p11(68,2), p12(68,2), pcfcatm(imt,jmt,2)
+
+	common /atm_box/ atm_box_pco2,atm_box_tot,atm_box_ann
+	1	,atm_box_tot_c13,atm_box_ann_c13,atm_box_rc
+
+* include information for the ocmip chemistry run
+	common /ocmip1/ silicate(imt,jmt)

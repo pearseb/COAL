@@ -1,0 +1,190 @@
+c Modified for the conversion of the OGCM auxiliary files to netCDF. In the
+c process, these files have been renamed as follows:
+c   sss.dat    -> sss.nc
+c   sst.dat    -> sst.nc
+c   stress.dat -> stress.nc
+c SJP 2008/02/03
+c
+c Major tidy-up of ocean model source code.
+c SJP 2007/06/17
+c
+c Added IMPLICIT NONE statement, plus variable declarations as necessary.
+c SJP 2007/05/30
+c
+c Transferred COMMON block declarations to separate header files.
+c SJP 2007/05/29
+c
+c Modified to enable relaxation of the coupled model SSTs and SSSs towards
+c prescribed values.
+c SJP 2006/01/05
+c
+c Split off from step.f; redundant code deleted.
+c SJP 2003/12/30
+
+      subroutine ocdatro
+
+c---- Routine to read 12 months of data for ocean model
+c---- Select 2 relevant months for interpolation.
+
+      implicit none
+
+      include 'OPARAMS.f'
+      include 'SFC1.f'
+      include 'LEVD.f'
+      include 'SSTSAL.f'
+      include 'FEWFLAGS.f'
+
+      character title*60
+      integer i, j, k
+      logical got_sss, got_sst, got_stress
+      real sss_save(imt-2, jmt-2, 12), sst_save(imt-2, jmt-2, 12),
+     &     strx_save(imt-2, jmt-2, 12), stry_save(imt-2, jmt-2, 12)
+
+      data got_sss /.false./
+      data got_sst /.false./
+      data got_stress /.false./
+      save got_sss, got_sst, got_stress, sss_save, sst_save, strx_save,
+     &     stry_save
+
+c---- Read in data from files holding 12 months of data.
+c---- Put data for months lmon1,lmon2 into global arrays
+c---- with last index locations of 1,2 respectively.
+
+c...  ***************************************
+c...  ***  READ SURFACE WIND STRESS DATA  ***
+c...  ***************************************
+      if (.not. lcouple) then
+
+c...  Read the surface wind stress data, if this has not already been done
+      if (.not. got_stress) then
+
+        write (*, *)
+        write (*, *) "Reading zonal wind stress data :"
+        write (*, *)
+        write (*, *) "File     =  stress.nc"
+        write (*, *) "Variable =  strx"
+
+        call read_real_3d("stress.nc", "strx", imt-2, jmt-2, 12,
+     &                    strx_save, title)
+
+        write (*, *) "Title    =  ", trim(title)
+        write (*, *)
+
+        write (*, *)
+        write (*, *) "Reading meridional wind stress data :"
+        write (*, *)
+        write (*, *) "File     =  stress.nc"
+        write (*, *) "Variable =  stry"
+
+        call read_real_3d("stress.nc", "stry", imt-2, jmt-2, 12,
+     &                    stry_save, title)
+
+        write (*, *) "Title    =  ", trim(title)
+        write (*, *)
+
+        got_stress = .true.
+
+      end if
+
+c...  Transfer the surface wind stress data to the arrays STRX and STRY, and
+c...  pad in the x-direction
+      do j = 2, jmtm1
+        do i = 2, imtm1
+          strx(i, j, 1) = strx_save(i-1, j-1, lmon1)
+          strx(i, j, 2) = strx_save(i-1, j-1, lmon2)
+          stry(i, j, 1) = stry_save(i-1, j-1, lmon1)
+          stry(i, j, 2) = stry_save(i-1, j-1, lmon2)
+        end do
+        strx(1, j, 1) = strx(imtm1, j, 1)
+        strx(1, j, 2) = strx(imtm1, j, 2)
+        strx(imt, j, 1) = strx(2, j, 1)
+        strx(imt, j, 2) = strx(2, j, 2)
+        stry(1, j, 1) = stry(imtm1, j, 1)
+        stry(1, j, 2) = stry(imtm1, j, 2)
+        stry(imt, j, 1) = stry(2, j, 1)
+        stry(imt, j, 2) = stry(2, j, 2)
+      end do
+
+      end if   ! lcouple
+
+c...  *******************************************
+c...  ***  READ SEA SURFACE TEMPERATURE DATA  ***
+c...  *******************************************
+
+c...  Read the SST data, if this has not already been done
+      if (.not. got_sst) then
+
+        write (*, *)
+        write (*, *) "Reading sea surface temperature data :"
+        write (*, *)
+        write (*, *) "File     =  sst.nc"
+        write (*, *) "Variable =  sst"
+
+        call read_real_3d("sst.nc", "sst", imt-2, jmt-2, 12, sst_save,
+     &                    title)
+
+        write (*, *) "Title    =  ", trim(title)
+        write (*, *)
+
+        got_sst = .true.
+
+      end if
+
+c...  Transfer the SST data to the array SSTM, and pad in the x-direction
+      do j = 2, jmtm1
+        do i = 2, imtm1
+          sstm(i, j, 1) = sst_save(i-1, j-1, lmon1)
+          sstm(i, j, 2) = sst_save(i-1, j-1, lmon2)
+        end do
+        sstm(1, j, 1) = sstm(imtm1, j, 1)
+        sstm(1, j, 2) = sstm(imtm1, j, 2)
+        sstm(imt, j, 1) = sstm(2, j, 1)
+        sstm(imt, j, 2) = sstm(2, j, 2)
+      end do
+
+c...  ****************************************
+c...  ***  READ SEA SURFACE SALINITY DATA  ***
+c...  ****************************************
+
+c...  Read the SSS data, if this has not already been done, subtract 35 psu and
+c...  convert to absolute units
+      if (.not. got_sss) then
+
+        write (*, *)
+        write (*, *) "Reading sea surface salinity data :"
+        write (*, *)
+        write (*, *) "File     =  sss.nc"
+        write (*, *) "Variable =  sss"
+
+        call read_real_3d("sss.nc", "sss", imt-2, jmt-2, 12, sss_save,
+     &                    title)
+
+        write (*, *) "Title    =  ", trim(title)
+        write (*, *)
+
+        got_sss = .true.
+
+        do k = 1, 12
+          do j = 1, jmt-2
+            do i = 1, imt-2
+              sss_save(i, j, k) = (sss_save(i, j, k) - 35.0) / 1000.0
+            end do
+          end do
+        end do
+
+      end if
+
+c...  Transfer the SSS data to the array SALM, and pad in the x-direction
+      do j = 2, jmtm1
+        do i = 2, imtm1
+          salm(i, j, 1) = sss_save(i-1, j-1, lmon1)
+          salm(i, j, 2) = sss_save(i-1, j-1, lmon2)
+        end do
+        salm(1, j, 1) = salm(imtm1, j, 1)
+        salm(1, j, 2) = salm(imtm1, j, 2)
+        salm(imt, j, 1) = salm(2, j, 1)
+        salm(imt, j, 2) = salm(2, j, 2)
+      end do
+
+      RETURN
+      END

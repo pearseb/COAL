@@ -1,0 +1,976 @@
+#if defined dmr_cfc && !defined dmr_oline 
+* **NO CODE TO COMPILE FOR CFC RUNS
+
+#else
+
+c  This routines are required to run the BGC module 
+c To compile first apply preprocessing
+c
+	subroutine bio_i 
+*	Initialize the variables of the biogeochemical module
+c
+	include "obgc.h"
+	include "extra.h"
+	include "bio.h"
+
+	parameter (ntmaxp1 = nbio2d)
+	character *12 trc_name(ntmaxp1)
+	namelist /bgc_names/ p_k,s_npp,
+	1	ratio_pop,pwl_pop,
+	1	rain_ratio, ratio_pic, pwl_pic,terr_input,
+	1	pmodel,temp,time,xmixl,pcon,pwr_sat,
+	1	tr_off,
+	1	igas,n_pho,n_alk,n_dic,n_c14,n_si,n_oxy,n_c13,n_fe
+	1	,trc_name
+	1	,idump,jdump,kdump,xdump,pdump
+	1	,pwl_opal,ratio_opal
+	1	,geo_seq
+	1	, tglobal, ivredc, ivredo, ivredpic
+	1	, ipic
+
+* Bio terms initial values
+	data pwl_pop /-.836/
+	data pwl_pic /-2./
+	data pwl_opal /12e3/  ! 12 km
+	data pwr_sat /0./
+	data temp,time,xmixl,trad,pcon /24.,76.,50.,0.,0./
+	data geo_seq /ntmax*0/
+        data ivredc /0/
+	data ivredo /0/, ipic /0/, ivredpic /0/
+c Default values for BGC module 
+	data c0 /0./
+* Tracer names
+	data trc_name /ntmaxp1*' '/
+
+	data ratio_opal /ntmax*0./, 
+	1 ratio_pop /ntmax*0./, ratio_pic /ntmax*0./
+	data tglobal /ntmax*1./
+
+	if (n_si .ne.0 ) ratio_opal(n_si)=10.
+
+	read  (5, bgc_names)
+	write (6,bgc_names)
+c
+	do n=1,nt
+	 if (trc_name(n) .ne. ' ') trname(n)=trc_name(n)
+	enddo
+	trname(1) = "Temperature"
+	trname(2) = "Salinity"
+	if (n_oxy.ne.0) then
+	 trname(n_oxy)="Oxygen"
+	 igas(n_oxy-2)=1
+	endif
+        if (n_pho.ne.0) then
+             trname(n_pho)="Phosphate"
+             igas(n_pho-2)=0
+        endif
+        if (n_dic.ne.0) then
+             trname(n_dic)="DIC"
+             igas(n_dic-2)=2
+        endif
+        if (n_alk.ne.0) then
+             trname(n_alk)="Alk"
+             igas(n_alk-2)=0
+        endif
+        if (n_c13.ne.0) then
+             trname(n_c13)="C13"
+             igas(n_c13-2)=5
+        endif
+        if (n_c14.ne.0) then 
+             trname(n_c14)="C14"
+             igas(n_c14-2) =6 
+        endif
+        if (n_si.ne.0) then
+             trname(n_si)="Silicate"
+             igas(n_si-2)=0
+        endif
+        if (n_fe.ne.0) then
+             trname(n_fe)="Iron"
+             igas(n_fe-2)=0
+        endif
+
+        print*, "obgc: tracer names=",trname
+        print*,"obgc: gas indexes=",igas
+
+        ntr_req = max(n_oxy,n_dic,n_c13,n_c14,n_alk,n_pho,n_si,n_fe)
+        if (nt.ne. ntr_req) then 
+         print *,"obgc: nt does not equal number of requested tracers"
+         print*,"nt=",nt,"  ntr_req=",ntr_req
+         stop
+        endif
+
+
+#ifdef rjm_co2_dumping
+	write(6,*) 'CO2 dumping site',xt(idump),yt(jdump),zt(kdump)
+	1	,' Amount (GT/yr)',xdump
+	xdump = xdump*1e9*1e15/3.73248e8	! convert to pmol/s
+#endif
+
+#ifdef rjm_geo_seq
+	gCtppm = 0.48
+	write(6,*) 'Prescribe geological sequestration',geo_seq
+	do l=1,nt
+	 geo_seq(l) =geo_seq(l)/(365.*24.*3600)  ! GtC/yr to GtC/sec
+	 ttflux(l)=0.
+	enddo
+#endif
+	write(6,*) 'phosphate addition in the southern subtropics',pdump
+
+*   Initialize pop remineralization Function 
+* for pop and pic
+	zpop=1e-4     ! 1/10000cm or 1/100m
+	zpic=1e+2     ! m to cm
+
+	fmin_pop(1)=1.
+	fmin_pop(km)=0
+	fmin_pic(1)=1.
+	fmin_pic(km)=0.
+	i_pop=4 !2   !not used
+	i_pic=12 !6
+* opal remineralization
+	fmin_opal(1)=1.
+	fmin_opal(km)=0.
+	i_opal=12     ! minimum depth to start remineralization
+
+	do k=1,km-1
+	  dizt(k) = 1./dzt(k)
+	  dz_t=dzt(k)*.5
+	fmin_pop(k)=min(1.0, ( (zt(k)+dz_t)*zpop )** pwl_pop )
+	fmin_pic(k)=min(1.0,  exp( -(zt(k)+dz_t)/(zpic*pwl_pic)) )
+	fmin_opal(k)=min(1.0,  exp( -(zt(k)+dz_t)/(zpic*pwl_opal)) )
+	enddo
+	fmin_pop(km)=0.
+	fmin_pic(km)=0.
+	dizt(km) = 1./dzt(km)
+	  print*,'Depth',zt
+	  print*,'Fmin',fmin_pop
+	  print*,'Fmin',fmin_pic
+	  print*,'Fmin',fmin_opal
+
+c Set sediments to zero
+	do j=1,jmt
+	  do i=1,imt
+	    sediments(i,j)=c0
+		do n=1,nt-2
+		 fluxgas(i,j,n)=c0
+		enddo
+	  enddo
+	enddo
+
+c SBC for the BGC module come from atmosphere
+* need windspeed, shortwave radiation and surface pressure
+	call nread_ocmip
+
+	return
+	end
+
+	subroutine obgc_atmco2 (atmco2)
+! get the co2 from rrvco2 (RADISW.f) for coupled run
+! requires this interface to get access to rrvco2 without messing up 
+! ocean code
+	 include "PARAMS.f"
+	 include "RDPARM.f"
+	 include "RADISW.f"    ! holds the atmospheric co2 variable
+
+         atmco2 = rrvco2 *1e6   !ppm units
+	  return
+	  end
+
+	subroutine bio_geo_chem (j, n)
+* bgc module
+c
+c=======================================================================
+c
+c     input:
+c       joff = offset relating "j" in the MW to latitude "jrow"
+c       js   = starting row in the MW
+c       je   = ending row in the MW
+c       is   = starting longitude index in the MW
+c       ie   = ending longitude index in the MW
+c
+c    author:  r.j.matear  e-mail richard.matear@ml.csiro.au
+c=======================================================================
+c
+c 	The matrix source will hold the source and sink terms derived 
+c from the the biogeochemical model
+c
+c  0. Calculate carbon chemistry terms
+c  1. Biological uptake 
+c  2. Biological remineralization
+c  3. Check Oxygen and sediments 
+c  4. Air-sea exchange
+
+c  Setup for the following tracer order
+c O2, PO4, CO2
+
+
+        include "obgc.h"
+	 include "extra.h"
+        include "bio.h"
+!	 include "co2.h"
+	 include "FEWFLAGS.f"  ! logical flags of which lcouple is used here
+
+	parameter (istrt=2, iend=imt-1)
+	save pbtime,itimes,sum1,sum2,sum3,sum4
+
+	data pbtime,itimes /0.,-1/
+	c0=0.
+
+* Index to use for biology
+	ibdt=taum1
+
+	if (n .eq. 3 .and. j.eq.2) itimes = itimes+1
+	if (n.eq.3) call tx_growth(j)
+
+
+! rjm Needs to be fixed to do c14
+c C14 Tracer
+	if (n.eq. n_c14) then
+	c14_atm=1e2
+	c14_lambda = -3.88921e-12
+	c14_gamma = 3.215e-7/dzt(1)*1e2
+	  do i=istrt,iend
+	   source(i,1) = (c14_atm - tb(i,1,n) )*c14_gamma
+	   fluxgas(i,j,n-2)=source(i,1)
+	  enddo
+          do k=2,km
+            do i=istrt,iend
+		source(i,k) = c14_lambda*tb(i,k,n)
+	      enddo
+	   enddo
+	return
+	endif
+c --------------------------------------------
+c	
+c Oxygen Tracer
+! do some extra stuff on the first bgc tracer
+
+	if (n .eq. 3) then
+
+* Modify pCO2 and C13 in atmosphere
+! compute year of integration 
+	 ttt=itt/float(knitd*365)
+	if (j.eq.2) then 
+	 pco2a=co2_history(ttt)
+
+! get the co2 from rrvco2 (RADISW.f) for coupled run
+      if (lcouple) call obgc_atmco2(pco2a)
+
+! if pco2a < 280 set the fc13a using pco2 of 280.
+	 fc13a = 0.011164382 - 2.0225714e-7*max(0.,(pco2a-280.) ) 
+#ifdef dmr_atm_box
+	 fc13a=rc_atm(pco2a)
+#endif
+	 print *,'Pco2 evolution',itt,knitd,ttt,pco2a,fc13a,lcouple
+	endif
+
+	tott = ttt   ! start the total time from 2004
+
+* Compute carbon chemistry terms if dic tracer is used
+	 if (n_dic .gt. 0 ) then  ! start
+        do i=istrt,iend 
+	  if (fm(i,1) .ne. 0) then
+
+	  temp=tb(i,1,1)
+	  saln=(tb(i,1,2)+.035)*1e3
+
+	    if (n_alk .le. 0) then
+	     alk=2377  ! 2431 old value
+	    else
+	     alk =tb(i,1,n_alk) 
+	    endif
+	    tdic =tb(i,1,n_dic) 
+
+* only updated every ITIMES time-step
+	    if (mod(itimes,5) .eq. 0) then
+* Use modified ocmip chemistry to determine co2 parameters
+* The original ocmip code wants to calculate the co2 flux but
+* I will do this calculation later because it is more efficient
+* when consider multiple dic tracers (i.e. dic and c-13)
+	 tdicp=tdic
+	 alkp=alk
+	 if (n_pho.ne.0 ) po4=max(tb(i,1,n_pho),0.)
+	 si = max(silicate(i,j),0.)
+! rjm set to zero but since but could be changed 
+	 po4=0
+	 si=0
+	 atmpres=1.
+	 atmco2_t=pco2a
+
+      xco2=atmco2_t
+      phlo = 1.0
+      phhi = 13.0
+      pp=0
+      call co2calc1(temp,saln,tdicp,alkp,po4,si,
+	1 phlo,phhi,ph,xco2,atmpres,
+	1 co2star,dco2star, omegaar1,omegaca1,co3,fco2,pp,ff)
+* store the carbon parameters for later use
+	     pco2o(i,j,n_dic-2)=fco2
+	     omegaar(i,j) = omegaar1
+	     omegaca(i,j) = omegaca1
+	     co2sol(i,j) = ff
+
+	endif  ! test for itimes
+!gasx from Wannikof 1992 in cm/s where sbcbio(i,j,1) is wind speed squared (m/s)^2
+	    x_co2(i,j) = sqrt(660.) * 0.39 *sbcbio(i,j,1)/
+	1	schmidt_no(2,temp)**.5 *  co2sol(i,j)
+	1	*2.7777778e-4
+
+!	print*,'rjm',i,j,omegaar(i,j),pco2o(i,j,n_dic-2)
+	endif  ! masks
+	enddo  ! i - loop
+	endif  ! end n_dic if statement
+*  ******* end carbon chemistry *********
+!	print*,'rjm0',j,n
+
+c Compute New Production
+		do i=istrt,iend 
+* Units are mmol/m3/s  cm
+*  = 1e-2 mmol/m2/s
+		if (n_pho.gt.0) then
+		 phs=(tb(i,1,n_pho))  !*tmask(i,1,j)
+		else
+		 phs=c0
+		endif
+		if (phs .le. 0.02) phs=c0
+
+		if (n_fe.gt.0) then 
+		 dfe = max(tb(i,1,n_fe),0.) 
+		pop(i,1,j) = s_npp*vmax(i,j)*dzt(1)* 
+     1       min( phs /(phs+p_k), dfe/(dfe+.1),fpgr_temp(i,j) )
+	 	else 
+! old pop(i,1,j) =s_npp*vmax(i,j)*dzt(1)*fpgr_temp(i,j)*phs/(phs+p_k)
+		pop(i,1,j) = s_npp*vmax(i,j)*dzt(1)* 
+     1       min( phs /(phs+p_k), fpgr_temp(i,j) )
+	 	endif
+
+! Modify the P:C:O ratio
+       vredf=1.
+	if (ivredc.eq.0) vredf=1.
+       if (ivredc.eq.1) 
+     1    vredf= (1. + (pco2o(i,j,n_dic-2) - 280.)*2./700./6.6)
+	if (ivredc.eq.2)
+     1   vredf= (1. + (pco2a - 280.)*2./700./6.6)
+
+c Compute POC from POP 
+	poc(i,1,j) = pop(i,1,j)*ratio_pop(n_dic)*vredf  
+!Note poc is not used in source equation only in pic scaling below
+
+c Compute CaCO3 shell production as a constant value of pop
+	if (ivredpic .eq.1) 
+     1   pic(i,1,j) = rain_ratio*poc(i,1,j)
+       if (ivredpic .eq.0)  
+     1   pic(i,1,j) = rain_ratio*pop(i,1,j)*ratio_pop(n_dic)
+
+c Calculate CaCO3 production scaling dep on omegaca
+	if (ipic.ge.1) then
+	 if (omegaca(i,j).gt.1) then
+	   var_satst(i,j) = (omegaca(i,j)-1)**pwr_sat
+	 else
+	   var_satst(i,j) = 0  !no pic export
+	 endif  !end test for omega
+
+! scaled based on poc which includes the vred term !
+        if (ivredpic.eq.1) 
+     1    pic(i,1,j) = var_satst(i,j)*rain_ratio*poc(i,1,j)
+! scaled based on pop with constant c/p 
+	 if (ivredpic .eq. 0)
+     1 pic(i,1,j)=var_satst(i,j)*rain_ratio*pop(i,1,j)*ratio_pop(n_dic)
+
+	endif  ! end omegaca dependency
+
+
+c Compute the opal production
+	if (n_si.ne.0)
+	1    opal(i,1,j) = pop(i,1,j)*tb(i,1,n_si)/(tb(i,1,n_si)+4)
+
+	 	enddo  ! end i-loop
+c Compute remineralization of pop, pic, opal
+		do i=istrt,iend
+		 do k=2,kmt(i,j)-1
+		  pop(i,k,j)=-pop(i,1,j)*
+	1	    (fmin_pop(k-1)-fmin_pop(k) )
+                  pic(i,k,j) = -pic(i,1,j) *
+	1          (fmin_pic(k-1) - fmin_pic(k) )
+	 if (n_si.ne.0) 
+	1	  opal(i,k,j) = -opal(i,1,j)*
+	1	    (fmin_opal(k-1) - fmin_opal(k) )
+
+		 enddo
+c redissolved the remainder in the bottom
+		 pop(i,kmt(i,j),j)=-pop(i,1,j)*
+	1		(fmin_pop(kmt(i,j)-1)-fmin_pop(km) )
+	1		- sediments(i,j)
+		 sediments(i,j)=0.
+		 pic(i,kmt(i,j),j) = -pic(i,1,j) *
+	1          (fmin_pic(kmt(i,j)-1) - fmin_pic(km) )
+	 if (n_si.ne.0) 
+	1	opal(i,kmt(i,j),j) = -opal(i,1,j)*
+	1	    (fmin_opal(kmt(i,j)-1) - fmin_opal(km) )
+
+		enddo
+		endif  ! end calculations on first tracer
+
+
+! Compute Air-Sea Gas Exchange 
+!  oxygen
+	if (n .eq. n_oxy ) then    !setup for oxygen but the code can do other gases
+		ng=igas(n-2)
+
+		do i=istrt,iend
+	        if  ( fm(i,1).gt.0 ) then 
+* Units are 1e-2 mmol/m2/s
+		 temp=tb(i,1,1)
+	  	 saln=(tb(i,1,2)+.035)*1e3
+
+		 oxs=tb(i,1,n)+tr_off(n)
+		 oxa=gas_sat(temp,saln,ng ) 
+! gas flux from Wannikof 1992 in cm/s where sbcbio(i,j,1) is wind speed squared (m/s)^2
+	    x_flux = sqrt(660.) * 0.39 *sbcbio(i,j,1)/
+	1	schmidt_no(ng,temp)**.5
+	1	*2.7777778e-4
+	    fluxgas(i,j,n-2) = x_flux*(oxa-oxs)
+
+		 endif
+		enddo
+
+	else	
+
+! Calculate air-sea flux for other tracers
+	if (n.eq.n_pho) then
+       do i=istrt,iend
+	    fluxgas(i,j,n-2) = terr_input
+* phosphate fertilization
+	rtd=180./3.14159
+	spy=365.*3600*24
+	yy=phit(j)*rtd
+	if (yy .ge. -50 .and. yy .le. -20.and.fm(i,1).ne.0) 
+	1	fluxgas(i,j,n-2)=fluxgas(i,j,n-2)+pdump/spy 
+	 enddo
+	 endif
+
+	if (n.eq.n_alk) then
+       do i=istrt,iend
+	    fluxgas(i,j,n-2) = -terr_input*16 
+	 enddo
+	 endif
+
+	if (n.eq.n_fe) then
+       do i=istrt,iend
+	    fluxgas(i,j,n-2) = sbcbio(i,j,4) 
+	enddo
+	endif
+
+!	 print*,'rjmg',j,n,igas(n-2)
+* For CO2 exchange the units are
+** umol/l *cm/s  ==>  1e-2 mmol/m2/s
+	if  (n .eq. n_dic .or. n.eq.n_c13) then 
+
+	 do i=istrt,iend
+* Only calculate for ocean points
+	  if (fm(i,1) .ne. 0) then
+	  temp=tb(i,1,1)
+	  saln=max (0., (tb(i,1,2)+.035)*1e3)
+
+	   if (n .eq. n_dic ) then
+
+#ifdef rjm_stab
+* Prescribe the pco2a value to use
+	pco2a=geo_seq(n)  ! variable provided in namelist
+* case with maximum pco2a but with different growth rates
+	pco2a = min(750.,377.85 + (ttt+1780-2006)*geo_seq(n) )
+#endif
+      fluxgas(i,j,n-2) = x_co2(i,j)*(pco2a-pco2o(i,j,n-2)-dpco2a)
+
+#ifdef rjm_vred_noaco2
+      fluxgas(i,j,n-2) = x_co2(i,j)*(280.-pco2o(i,j,n-2)-dpco2a)
+#endif
+	    endif ! endif for fm > 0
+	   endif ! end dic
+* C13 exchange (must include CO2 exchange)
+	   if (n .eq. n_c13 ) then
+	    if (fm(i,1) .ne. 0) then
+*	    cas=0.98940
+*	    csa=0.9984
+* Temperature Dependent fractionation
+ 	temk = 1./(temp+273.15)
+ 	cas = (-0.373*temk + 1.00019) *.9995
+	csa = (-9.866*temk + 1.02412) *.9995
+
+	    fluxgas(i,j,n-2) = cas*x_co2(i,j)*pco2a
+	1      *fc13a - 
+	1	csa*x_co2(i,j)*pco2o(i,j,n_dic-2)*
+	1	(tb(i,1,n)+tr_off(n))
+	1	 /( tb(i,1,n_dic) +tr_off(n_dic) )
+
+	    endif  ! endif fm>0
+	     endif  ! endif for c13  
+
+	 enddo 	! end i loop
+	endif  ! endif for carbon
+	endif       ! endif airsea flux test
+	 
+!	 print*,'rjmg1',j,n
+
+! Compute the virtual fluxes
+! assumes fluxgas has been updated prior to the following
+! for n_pho and n_alk the terrerial input set fluxgas
+	 do i=istrt,iend
+	if (.not.lcouple) then
+	salf = flux(i,j,2)
+! salf = change in salinity in top layer per second
+	  fluxgas(i,j,n-2) = fluxgas(i,j,n-2)   
+	1    + salf *tglobal(n)/0.035 *dzt(1)
+	else
+! salf = change in salinity * rhow * dz(1) *0.01
+	salf = flux(i,j,2)
+	 WMTOP = 1.  ! v1.2 fixes units  RHOW*DZ(1)*0.01
+	   fluxgas(i,j,n-2) = fluxgas(i,j,n-2) 
+	1    + salf *tglobal(n)/0.035 *dzt(1)/wmtop
+	endif
+	enddo  ! i
+
+c Compute sources and sinks
+
+		do i=istrt,iend
+		isurf=1.
+		do k=1,kmt(i,j)
+         
+! Modify the P:C:O ratio since pop is used in source calculation
+       vredf=1.
+	 if (n.eq.n_dic .or. n.eq.n_c13.or. n.eq.n_oxy) then 
+	if (ivredc.eq.0) vredf=1.
+       if (ivredc.eq.1) 
+     1    vredf= (1. + (pco2o(i,j,n_dic-2) - 280.)*2./700./6.6)
+	if (ivredc.eq.2)
+     1   vredf= (1. + (pco2a - 280.)*2./700./6.6)
+     	if (ivredo.eq.0 .and. n.eq. n_oxy) vredf=1.
+        endif
+
+!	if (i.eq.2.and.k.eq.1) print *,j,n,vredf
+
+		 if (igas(n-2) .ne. 5) then
+		  source(i,k) = (-pop(i,k,j)*ratio_pop(n)*vredf
+	1	    -pic(i,k,j)*ratio_pic(n) 
+	2	    -opal(i,k,j)*ratio_opal(n) * min(n_si,1)
+	2	    + fluxgas(i,j,n-2)*isurf )*dizt(k)	
+		 if (n.eq.n_fe) source(i,k) = source(i,k) 
+	1         - max(0.0,(tb(i,k,n))-.6) /(86400.*10)   ! iron scavenging
+		 else 
+		  if (k.eq.1) ratio=( tb(i,1,n)+tr_off(n) )/
+	1		( tb(i,1,n_dic)+tr_off(n_dic) )
+		  source(i,k) = ( (-pop(i,k,j)*ratio_pop(n)*vredf
+	1	    -pic(i,k,j)*ratio_pic(n) ) 
+	1	    * ratio 	
+	2	    + fluxgas(i,j,n-2)*isurf )*dizt(k)	
+		 endif  !end test for c13
+		 isurf=c0
+
+		enddo
+		enddo
+
+
+#ifdef rjm_geo_seq
+	if (igas(n-2).eq.2) then 
+
+	if (n.eq.n_dic.and.j.eq.2) ttflux(1)=ttflux(1)+1
+	do i=2,imt-1
+	 da=dxt(i)*dyt(j)*cst(j)
+	 ttflux(n)= ttflux(n)+ fluxgas(i,j,n-2)*da
+	enddo
+
+* write fluxes
+	if (j.eq.jmt-1) then
+	fc=1e-5*1e-4* 12e-15  ! convert flux to GtC/s 
+	fcc=gCtppm*tott*spy
+	stflux(n)=ttflux(n)*fc/max(ttflux(1),1.)
+	if ( ifix(tott).eq. tott )
+	1 write(91,*) tott,n,dpco2a,geo_seq(n)*fcc,
+	1  stflux(n)*fcc,stflux(n_dic)*fcc,
+	1 (geo_seq(n)-stflux(n_dic)+stflux(n) )*fcc
+	1 ,ttflux(1)	
+	endif
+	endif
+#endif
+
+	return
+	end
+
+	subroutine tx_growth (j)
+c
+*	Author: r.j.matear
+* 	Compute adjustment to export production based on variable 
+* temperature and mixed layer depth
+
+	include "obgc.h"
+	include "bio.h"
+#ifdef dmr_tconstant
+	include "oline.h"
+#endif
+* Time terms
+	parameter (istrt=2, iend=imt-1)
+	c0=0.
+	p5=.5
+	par=pmodel(9)
+	alpha=pmodel(10)
+	dps = 1/86400.   ! inverse of seconds per day
+
+* Compute mixed layer depth
+ 	   do i=istrt,iend 
+
+		 k=1
+		 mld=k
+		 do k=1,km 
+		 if (mld .eq. k .and. k.le.kmt(i,j)-1) then
+		  if (abs (tb(i,1,1) - tb(i,k,1)) .lt. .01) 
+	1		mld=k
+		 endif
+		 enddo
+		 xmld(i,j) =(zt(mld) +dzt(mld)*p5) !cm
+		 xmld(i,j) = dzt(1)
+* factor for the mld variability
+	fmld = dzt(1)/xmld(i,j)  ! reduced growth with mld
+
+#ifdef dmr_tconstant
+	 tsurf = 10
+#endif
+
+		 fpgr_temp(i,j) = c0
+		 if (kmt(i,j) .ne. 0 ) then 
+* Compute Temperature and mixed layer depth adjustments
+	 	tsurf=tb(i,1,1)
+	 	fmax =  0.6*(1.066)**tsurf
+	 	f1= sbcbio(i,j,2)*alpha*par
+
+* Evans and Parslow PI equation
+*	 	fi = fmax*f1/sqrt(fmax**2 + f1**2 )
+* Brian Griffiths PI equation
+		fi = fmax * (1 - exp( -f1/fmax) )
+
+	        Vmax(i,j) = fmax*dps  ! per second
+! old 		 fpgr_temp(i,j) = fi*fmld*s_npp*dps  !per second
+		 fpgr_temp(i,j) = fi*fmld*dps / Vmax(i,j) !unitless
+
+
+		endif
+
+	 enddo
+	return
+	end
+
+c  Routine to determine the surface sources for the co2 perturbation
+
+	subroutine atm_source (joff, js, je, is, ie, n)
+c
+#ifdef rjm_atm_source
+c=======================================================================
+c
+c     input:
+c       joff = offset relating "j" in the MW to latitude "jrow"
+c       js   = starting row in the MW
+c       je   = ending row in the MW
+c       is   = starting longitude index in the MW
+c       ie   = ending longitude index in the MW
+c
+c    author:  r.j.matear  e-mail richard.matear@ml.csiro.au
+c=======================================================================
+c
+c  Setup for the following tracer order
+c  dCO2
+
+
+        include "param.h"
+        include "mw.h"
+
+        include "bio.h"
+	  include "bio_sbc.h"
+c grid info
+        include "coord.h"
+	  include "grdvar.h"
+c c2dtts
+	  include "scalar.h"		
+c kmt
+	  include "levind.h"	
+* Time terms
+	include "tmngr.h"
+
+	parameter (istrt=2, iend=imt-1)
+	save pbtime,itimes
+
+	data pbtime,itimes /0.,0/
+
+* Index to use for biology
+	ibdt=taum1
+#ifdef ios_upstrm
+	ibdt=tau
+#endif
+	if (n.eq.3 .and. joff.eq.0) itimes=itimes+1
+
+* Modify pCO2 and C13 in atmosphere
+#ifdef rjm_anthropogenic
+	xspin=0.
+	if (pbtime.eq.0) pbtime=prelyr
+	 ttt=prelyr-pbtime
+	if (ttt .le. xspin ) then
+	 pco2a=280.
+	else if (ttt .le.100+xspin) then
+	 pco2a = 280 + 0.28048302*(ttt-xspin)
+	else
+	 pco2a= 28.48302*exp( (ttt-100.+xspin)/41.936498)+280
+	endif
+* old value	fc13a = 0.01 - 1.818571e-7*(pco2a-280.)
+	fc13a = 0.011164382 - 2.0225714e-7*(pco2a-280.)
+	pco2a=pco2a-280 
+	print *,'Pco2 evolution',ttt,prelyr,pbtime,pco2a,fc13a
+#else
+	pco2a=280 -280  ! set to current value
+	pco2a=pco2_atm(ibdt)
+	fc13a =0.011164382  ! old value .01
+	print *,'Pco2 evolution',ttt,prelyr,pco2a
+#endif
+
+c Calculate air-sea flux for other tracers
+	if  (igas(n-2).gt.0 ) then 
+	do j=js,je
+	 jrow = j +joff
+       do i=istrt,iend
+* Only calculate for ocean points
+	  if (tmask(i,1,j) .ne. 0) then
+	  temp=t(i,1,j,1,ibdt)
+	  saln=max (0., (t(i,1,j,2,ibdt)+.035)*1e3 )
+
+* For CO2 exchange
+** umol/l *cm/s
+**  or 1e-2 mmol/m2/s
+	   if (igas(n-2) .eq. 2) then
+
+	    tdic =t(i,1,j,n,ibdt)+tr_off(n)
+	    tdic_2=tdic*tdic
+	    tdic_3=tdic_2*tdic
+	    tdic_4=tdic_2*tdic_2
+	    tdic_5=tdic*tdic_4
+	    pco2o(i,jrow,n_dic-2) = (1.5568 - 1.3993e-2*temp) *tdic 
+	1		+(7.4706-0.20207*temp)*1e-3*tdic_2 
+	2		-(1.2748-0.12015*temp)*1e-5*tdic_3 
+	3		+(2.4491-0.12639*temp)*1e-7*tdic_4 
+	4		-(1.5468-0.15326*temp)*1e-10*tdic_5
+
+*Compute CO2 solubility once and store in pop
+	    if (itimes .eq. 1) then
+      	tk=temp+273.15
+	       tk2 = tk /100.0
+      	pop(i,1,jrow) = 
+	1		exp( -60.2409 + 9345.17/tk + 23.3585*Alog(tk2) 
+	2   + saln*(2.3517E-2 - 2.3656E-2*tk2 + 4.7036E-3*tk2*tk2))
+	    endif
+
+	    x_co2(i,jrow) = 7.964*sbcbio(i,jrow,1)/
+	1	schmidt_no(2,temp)**.5 * pop(i,1,jrow)
+	1	*2.7777778e-4
+	    fluxgas(i,jrow,n-2) = x_co2(i,jrow)*
+	1	(pco2a-pco2o(i,jrow,n_dic-2))
+
+#ifdef rjm_co2_dumping
+	 if (i.eq.idump.and.jrow.eq.jdump) 
+	1 print*,'pco2',i,jrow,tdic,pco2o(i,jrow,n_dic-2),fluxgas(i,jrow,n-2)
+#endif
+
+* C13 exchange (must include CO2 exchange)
+	   else if (igas(n-2) .eq. 5) then
+*	    cas=0.98940
+*	    csa=0.9984
+* Temperature Dependent fractionation
+ 	temk = 1./(temp+273.15)
+ 	cas = (-0.373*temk + 1.00019) *.9995
+	csa = (-9.866*temk + 1.02412) *.9995
+
+	    fluxgas(i,jrow,n-2) = cas*x_co2(i,jrow)*pco2a
+	1      *fc13a - 
+	1	csa*x_co2(i,jrow)*pco2o(i,jrow,n_dic-2)*
+	1	(t(i,1,j,n,ibdt)+tr_off(n))
+	1	 /( t(i,1,j,n_dic,ibdt) +tr_off(n_dic) )
+
+
+	   endif	! end tracer type 
+
+	  endif	! end mask condition
+	 enddo		! end j loop
+	enddo		! end i loop
+
+	endif		! end atm-source condition
+
+c Compute sources and sinks
+	do j=js,je
+	 jrow = j +joff
+		do i=istrt,iend
+#ifdef rjm_co2_dumping
+	if (jrow.eq.jdump) then
+	source(idump,kdump,j) = 
+	1	xdump*cstdxtr(i,j)*dytr(jrow)*dztr(kdump)
+	endif
+#endif
+		isurf=1.
+		 if (igas(n-2) .ne. 5) then
+		  source(i,1,j) = (fluxgas(i,jrow,n-2)*isurf )*dizt(1)	
+		 else 
+		  ratio=( t(i,1,j,n,ibdt)+tr_off(n) )/
+	1		( t(i,1,j,n_dic,ibdt)+tr_off(n_dic) )
+		  source(i,1,j) = ( fluxgas(i,jrow,n-2)*isurf )*dizt(1)	
+		 endif
+		enddo
+	enddo
+
+
+#endif
+	return
+	end
+
+	subroutine sediment(i,k,j,n)
+	include "obgc.h"
+	include "bio.h"
+	include "extra.h"
+	dimension twodt(km)
+	twodt(k)=c2dtts
+c Check that oxygen is not less than zero
+	if (n.eq.3.and. ta(i,k,n) .lt. 0) then 
+
+	 rr=ratio_pop(n)
+	 if(ratio_pop(n).eq.0) rr=1.
+	 rr=1./rr
+		if (k.gt.1 .and. k.lt.kmt(i,j) ) then
+		 sred = min(ta(i,k,n),0.)/twodt(k) !*dzt(k)/twodt(k)
+		 ta(i,k,n) = max(ta(i,k,n),0.)
+		 source(i,k+1) = source(i,k+1) +sred*dzt(k)*dizt(k+1)
+		 sred = sred*rr*dzt(k)
+		 pop(i,k,j)=pop(i,k,j)+sred
+		 pop(i,k+1,j)=pop(i,k+1,j)-sred
+		else if (k.eq.kmt(i,j) ) then
+ 	        sediments(i,j)=
+	1	  min(ta(i,k,n),0.)*dzt(k) *rr/twodt(k)
+		 ta(i,k,n) = 
+	1	  max(ta(i,k,n),0.)
+		 pop(i,k,j)=pop(i,k,j)+sediments(i,j)
+		 sum=sum+sediments(i,j)
+		endif
+	endif
+	return
+	end
+
+	function rc_atm(pco2)
+* compute the c13/c12 ratio in the atmosphere
+	include "obgc.h"
+	include "bio.h"
+	ri=0.011164382
+	ci=280./.48
+	rc_atm=(ci*ri - atm_box_tot_c13)/(ci-atm_box_tot)
+*	print*,'Atm Box',ttt
+	return
+	end
+
+	function co2_history(ttt)
+	common /co2h/ ccc(501),xxx(501)
+#ifdef dmr_atm_box
+	include "obgc.h"
+	include "bio.h"
+#endif
+	data icall /0/
+	save icall,ico2 
+
+* Time to 1881 used in the co2 history
+	iyr=0  ! no need to delay start to 1880
+	tstart=1880-iyr
+
+#ifdef dmr_atm_box
+	if (icall.eq.0) then
+	 open(12,file='atm_box.dat',status='old')
+	 read(12,*) xt,pc,tot,ann,rc,tot_c13
+	 close(12)
+	 atm_box_tot=tot
+	 atm_box_ann=0
+	 atm_box_ann_c13=0
+	 atm_box_tot_c13=tot_c13
+	 atm_box_rc=rc
+	 icall=1
+	endif
+	co2_history=280 - atm_box_tot*.48
+*	print*,'Atm Box',ttt,co2_history,atm_box_tot,atm_box_ann
+
+#else
+	if (icall.eq.0) then
+	 atm_box_tot=0
+	 open(11,file='co2_history.dat',status='old')
+	 do i=1,501
+	 read(11,*,end=91) xxx(i),ccc(i)
+	 enddo
+	
+ 91    print*,'rjm number of co2 points is ', i-1
+ 	ico2 = i-1
+	icall=1
+	close(11)
+	endif
+
+	tstart=xxx(1)-iyr   ! use the first year in the file
+	if (ttt.lt.iyr) then
+	 co2_history=280
+	else
+	 i1=ttt+1-iyr
+	 if (i1.le.ico2-1) then 
+	  i2=i1+1
+	  co2_history=(ccc(i2)-ccc(i1) )*(ttt-xxx(i1)+tstart) +ccc(i1)
+	 else
+	 co2_history=ccc(ico2)
+	 endif
+	endif
+#endif
+
+	return
+	end
+
+	subroutine file_name2(i1,a7)
+	character *10 a7
+	character *1 a1
+	character *2 a2
+	character *3 a3
+	a7='svmo.nc000'
+#ifdef cexp4
+	i2=i1-1
+	i2a=i2/50
+	i3=i2a*50 +1
+#else
+	i2=i1-56
+	i2a=i2/15
+	i3=i2a*15 +56
+#endif
+	if (i3.le.9) then
+	write(a1,'(i1)') i3
+	a7(10:10)=a1
+	else if (i3.le.99) then
+	write(a2,'(i2)') i3
+	a7(9:10)=a2
+	else
+	write(a3,'(i3)') i3
+	a7(8:10)=a3
+	endif
+	return
+	end
+
+	subroutine file_name(i1,a7)
+	character *18 a7
+	character *1 a1
+	character *2 a2
+	character *3 a3
+	a7='archive/com0000.nc'
+	if (i1.le.9) then
+	write(a1,'(i1)') i1
+	a7(15:15)=a1
+	else if (i1.le.99) then
+	write(a2,'(i2)') i1
+	a7(14:15)=a2
+	else
+	write(a3,'(i3)') i1
+	a7(13:15)=a3
+	endif
+	return
+	end
+
+#endif

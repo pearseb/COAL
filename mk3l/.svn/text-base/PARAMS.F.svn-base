@@ -1,0 +1,138 @@
+c Modified for coupling of the new, high-resolution version of the ocean model
+c to the atmosphere.
+c SJP 2007/12/20
+c
+c Value of NLANP at R21 resolution reduced from 1228 to 1227, to reflect the
+c removal of one erroneous land point (the tip of the Antarctic Peninsula) from
+c the scheme which relocates runoff.
+c SJP 2003/06/09
+c
+c $Log: PARAMS.f,v $
+c Revision 1.35  2001/10/12 02:13:45  rot032
+c LDR changes, to bring sulfur cycle to run P76, and Mk2 OGCM fixes
+c
+c Revision 1.34  2000/12/08 03:58:52  rot032
+c Changes to aerosol scheme (and small newrain fix) from LDR
+c
+c Revision 1.33  2000/08/16 02:59:24  rot032
+c NCEP initialization option and CGCM changes from HBG
+c
+c Revision 1.32  2000/06/20 04:11:23  rot032
+c Fix ilon treatment.
+c
+c Revision 1.31  2000/06/20 02:27:10  rot032
+c Initial coupling of ECHAM chemical transport model (LDR)
+c
+c Revision 1.30  1999/06/30 07:04:12  rot032
+c Correction to ln2.
+c
+c Revision 1.29  1999/06/30 05:29:37  rot032
+c Mods for SCM.
+c
+c Revision 1.28  1999/05/20 06:23:52  rot032
+c HBG changes to V5-2
+c
+c Revision 1.27  1998/12/10  00:55:39  ldr
+c HBG changes to V5-1-21
+c
+c Revision 1.26  1997/12/23  03:40:00  ldr
+c Make R21/18L the default for now.
+c
+c Revision 1.25  1997/12/19  02:03:15  ldr
+c Changes from HBG, SPO and EAK for T63 CGCM, ice fixes and soil.
+c
+c Revision 1.24  1997/10/03  05:32:08  ldr
+c Changes for NEC from MRD and HBG
+c
+c Revision 1.23  1997/06/11  02:21:30  ldr
+c Include indirect sulfate aerosol effects.
+c
+c Revision 1.22  1996/02/19  04:09:38  ldr
+c Generalize for 24 levels.
+c
+c Revision 1.21  1995/11/23  06:03:25  ldr
+c Update qcloud to run h32 (used for BMRC & long run)
+c
+c Revision 1.19  1994/12/07  23:53:36  mrd
+c Explicitly declare all variables in include files.
+c
+c Revision 1.18  1994/08/08  17:20:45  ldr
+c Strip off excessive RCS comments at top of file.
+c
+c Revision 1.17  94/04/29  15:12:20  ldr
+c  Change from HBG: increase nbelow to 5 for R21 and R42 9L.
+c 
+c Revision 1.16  94/03/30  12:33:34  ldr
+c Changes to V4-5 from HBG and SPO for coupled and qflux runs
+c 
+c Revision 1.15  93/11/29  10:24:47  ldr
+c Correction for 18 level version.
+c 
+c Revision 1.14  93/10/19  10:31:07  ldr
+c Add extra diagnostics for qcloud scheme.
+c 
+c Revision 1.13  93/10/18  14:41:06  ldr
+c Correct T63 option.
+c 
+c Revision 1.12  93/10/07  12:41:43  ldr
+c Move machine parameter statement into new include file MACHINE.f and do
+c some tidying up.
+c 
+c Revision 1.11  93/09/13  14:35:03  mrd
+c Addded deep soil moisture percolation diagnostic
+c 
+c Revision 1.10  93/08/19  15:07:30  ldr
+c Minor cosmetic changes.
+c 
+c Revision 1.9  93/07/22  10:17:28  mrd
+c Add diagnostics for clear sky net surface radiation and downward radiation
+c at surface.
+c 
+c Revision 1.8  93/07/06  12:45:44  ldr
+c Add new stats for potential evap and scaling (Penman-Monteith) evap.
+c 
+      integer lon, lat, nl, mw, nbelow, ms
+      integer nlp, nlm
+      integer lw, lw1, lat2, lat2p, ngrid, max_radstm
+      character trunc !Rhomboidal (R) or triangular (T)
+      integer nw !size of spectral array: mw*mw (Rhom) or mw*(mw+1)/2 (Tri)
+      integer nlanp,ndips ! number of land points & dips
+      integer ln2 ! for processing NH+SH at same time
+      integer ilon ! For SCM only; equal to lon otherwise
+      logical SCM
+
+Choose model resolution
+C R21
+c     parameter (lon=64,lat=28,nl=9,mw=22,nbelow=5,trunc='R',nw=484)  !R21 9L
+      parameter (lon=64,lat=28,nl=18,mw=22,nbelow=9,trunc='R',nw=484) !R21 18L
+c     parameter (lon=64,lat=28,nl=24,mw=22,nbelow=12,trunc='R',nw=484)!R21 24L
+#ifdef OCEAN_LOW
+      parameter (nlanp=1227,ndips=14)
+CSJP      parameter (nlanp=1228,ndips=14)
+#else
+      parameter (nlanp=1220,ndips=1)
+#endif
+
+C R42
+c     parameter (lon=128,lat=54,nl=9,mw=43,nbelow=5,trunc='R',nw=1849)!R42 9L
+c     parameter (nlanp=????,ndips=??)
+
+C T63
+c     parameter (lon=192,lat=48,nl=9,mw=64,nbelow=5,trunc='T',nw=2080)!T63 9L
+c      parameter (lon=192,lat=48,nl=18,mw=64,nbelow=9,trunc='T',nw=2080)!T63 18L
+c      parameter (nlanp=6303,ndips=68)
+C
+c******************************************************************************
+C For single column model only
+      parameter (SCM=.false., ln2=2*lon, ilon=lon)
+c      parameter (SCM=.true., ln2=1, ilon=192) !Assumes SCM is based on T63
+c      parameter (lon=1,lat=48,nl=18,mw=64,nbelow=9,trunc='T',nw=2080)!T63 18L SCM
+c******************************************************************************
+      parameter (nlp=nl+1,nlm=nl-1)
+      parameter (lw=mw,lw1=lw+1)
+      parameter (lat2=2*lat,lat2p=2*lat+1)
+      parameter (ngrid=13,max_radstm=77)
+      parameter (ms=6)
+
+
+
